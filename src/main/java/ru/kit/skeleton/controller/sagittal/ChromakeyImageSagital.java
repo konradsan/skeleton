@@ -44,7 +44,7 @@ public class ChromakeyImageSagital {
 
     private void initRecommendation() {
         // ОЦТ
-        switch (compare(centerOfBody.x, 714 / 2, 10)) {
+        switch (compare(centerOfBody.x, centerOfBody.y, 10)) {
             case 1:
                 recommendation += "Неоптимальный статический стереотип: общий центр тяжести смещен вперед.\n";
                 break;

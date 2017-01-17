@@ -17,6 +17,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import ru.kit.skeleton.controller.frontal.ChromakeyImage;
+import ru.kit.skeleton.controller.sagittal.ChromakeyImageSagital;
 import ru.kit.skeleton.model.Skeleton;
 import ru.kit.skeleton.model.Step;
 import ru.kit.skeleton.repository.BackStepRepositoryImpl;
@@ -24,6 +26,7 @@ import ru.kit.skeleton.repository.ListRepository;
 import ru.kit.skeleton.repository.SagittalStepRepositoryImpl;
 
 import java.awt.*;
+import java.util.Arrays;
 
 /**
  * Created by mikha on 12.01.2017.
@@ -35,6 +38,7 @@ public class SkeletonController {
     public Button buttonOk;
     private Stage stage;
     public TabPane tabPane;
+
     private ListRepository backStepRepository = new BackStepRepositoryImpl();
     private ListRepository sagittalStepRepository = new SagittalStepRepositoryImpl();
 
@@ -51,6 +55,9 @@ public class SkeletonController {
 
     private GraphicsContext graphicsContextBack;
     private GraphicsContext graphicsContextSagittal;
+
+    private static final int CANVAS_WEIGHT = 450;
+    private static final int CANVAS_HEIGHT = 780;
 
     private Skeleton skeleton;
     private boolean isFinish = false;
@@ -70,7 +77,19 @@ public class SkeletonController {
 
     @FXML
     public void onSave(ActionEvent event) {
+        ChromakeyImage back = new ChromakeyImage(backStepRepository.getByName("Правая подмышка").getPoint(), backStepRepository.getByName("Левая подмышка").getPoint(),
+                backStepRepository.getByName("Правое плечо").getPoint(), backStepRepository.getByName("Левое плечо").getPoint(), backStepRepository.getByName("Левая мочка уха").getPoint(),
+                backStepRepository.getByName("Правая мочка уха").getPoint(), backStepRepository.getByName("Левая точка талии").getPoint(), backStepRepository.getByName("Правая точка талии").getPoint(),
+                backStepRepository.getByName("Левая точка пояса").getPoint(), backStepRepository.getByName("Правая точка пояса").getPoint());
+        String backResult = back.getRecommendation();
+        System.out.println(backResult);
 
+        ChromakeyImageSagital sagittal = new ChromakeyImageSagital(sagittalStepRepository.getByName("Пятка").getPoint(), sagittalStepRepository.getByName("Носок").getPoint(),
+                sagittalStepRepository.getByName("Талия").getPoint(), sagittalStepRepository.getByName("Выпуклая часть спины").getPoint(), sagittalStepRepository.getByName("Шея").getPoint());
+        String sagittalResult = sagittal.getRecommendation();
+        System.out.println(sagittalResult);
+
+        close();
     }
 
     @FXML
@@ -87,7 +106,9 @@ public class SkeletonController {
             graphicsContextBack.drawImage(new Image(getClass().getClassLoader().getResource("ru/kit/skeleton/image/photo_not_available.png").toString()), 10, 200);
         }
 
-        new Thread(listenerWhenFinish).start();
+        Thread t = new Thread(listenerWhenFinish);
+        t.setDaemon(true);
+        t.start();
     }
 
     private void insertImagesToBack() {
@@ -102,7 +123,7 @@ public class SkeletonController {
         WritableImage result = null;
         try {
             PixelReader reader = image.getPixelReader();
-            result = new WritableImage(reader, 575, 19, (int) canvasBack.getWidth(), (int) canvasBack.getHeight());
+            result = new WritableImage(reader, 575, 19, CANVAS_WEIGHT, CANVAS_HEIGHT);
         } catch (Exception e) {
             return image;
         }
@@ -114,7 +135,7 @@ public class SkeletonController {
         if (tabBack.isSelected()) {
             tabPane.getSelectionModel().select(tabSagittal);
         } else {
-            close();
+            onSave(null);
         }
     }
 
@@ -161,29 +182,48 @@ public class SkeletonController {
 
     @FXML
     public void onClickCanvasSagittal(MouseEvent event) {
-        Point point = new Point((int)event.getX(), (int)event.getY());
+        Point point = null;
+        if (maximiseCounters[1] == 0) {
+            point = new Point((int)event.getX(), (int)event.getY());
+        } else {
+            double multiplier = 1;
+            for (int i = 0; i < maximiseCounters[1]; i++) {
+                multiplier *= 1.2;
+            }
+            point = new Point((int)(event.getX() / multiplier), (int)(event.getY() / multiplier));
+        }
 
         Step step = sagittalStepRepository.getThis();
 
         if (step != null) {
             step.setPoint(point);
 
-            System.out.println(event.getX() + " " + event.getY());
-            putPoint(graphicsContextSagittal, step, event.getX(), event.getY());
+            System.out.println(point.getX() + " " + point.getY());
+            putPoint(graphicsContextSagittal, step, point.getX(), point.getY());
             initialFieldsForSagittal();
         }
     }
 
     @FXML
     public void onClickCanvasBack(MouseEvent event) {
-        Point point = new Point((int)event.getX(), (int)event.getY());
+        Point point = null;
+        if (maximiseCounters[0] == 0) {
+            point = new Point((int)event.getX(), (int)event.getY());
+        } else {
+            double multiplier = 1;
+            for (int i = 0; i < maximiseCounters[0]; i++) {
+                multiplier *= 1.2;
+            }
+            point = new Point((int)(event.getX() / multiplier), (int)(event.getY() / multiplier));
+        }
+
         Step step = backStepRepository.getThis();
 
         if (step != null) {
             step.setPoint(point);
 
-            System.out.println(event.getX() + " " + event.getY());
-            putPoint(graphicsContextBack, step, event.getX(), event.getY());
+            System.out.println(point.getX() + " " + point.getY());
+            putPoint(graphicsContextBack, step, point.getX(), point.getY());
             initialFieldsForBack();
         }
 
@@ -258,7 +298,9 @@ public class SkeletonController {
 
     @FXML
     public void onActionPhoto(ActionEvent event) {
-        new Thread(startPhotoMaker).start();
+        Thread t = new Thread(startPhotoMaker);
+        t.setDaemon(true);
+        t.start();
     }
 
     @FXML
@@ -332,24 +374,62 @@ public class SkeletonController {
                 stage.close();
             }
         } else {
-
+            startPhotoMaker.isCancelled();
+            listenerWhenFinish.isCancelled();
+            stage.close();
         }
 
     }
 
 
+    private int maximiseCounters[] = new int[2];
     public void maximise(ActionEvent event) {
-        if (tabBack.isSelected()) {
+        if (tabBack.isSelected() && maximiseCounters[0] < 5) {
 
             graphicsContextBack.clearRect(0, 0, canvasBack.getWidth(), canvasBack.getHeight());
-            graphicsContextBack.scale(2, 2);
+            graphicsContextBack.scale(1.2, 1.2);
+            canvasBack.setWidth(canvasBack.getWidth() * 1.2);
+            canvasBack.setHeight(canvasBack.getHeight() * 1.2);
 
             insertImagesToBack();
             backStepRepository.getAllStepWhichPointNotNull().stream().forEach(s -> putPoint(graphicsContextBack, s, s.getPoint().getX(), s.getPoint().getY()));
-        } else {
+            maximiseCounters[0]++;
+
+        } else if (maximiseCounters[1] < 5) {
+
+            graphicsContextSagittal.clearRect(0, 0 , canvasSagittal.getWidth(), canvasSagittal.getHeight());
+            graphicsContextSagittal.scale(1.2, 1.2);
+            canvasSagittal.setWidth(canvasSagittal.getWidth() * 1.2);
+            canvasSagittal.setHeight(canvasSagittal.getHeight() * 1.2);
+            
+            insertImageToSagittal();
+            sagittalStepRepository.getAllStepWhichPointNotNull().stream().forEach(s -> putPoint(graphicsContextSagittal, s, s.getPoint().getX(), s.getPoint().getY()));
+            maximiseCounters[1]++;
+        }
+    }
+
+    public void minimise(ActionEvent event) {
+        if (tabBack.isSelected() && maximiseCounters[0] > 0) {
+
+            graphicsContextBack.clearRect(0, 0, canvasBack.getWidth(), canvasBack.getHeight());
+            graphicsContextBack.scale(0.83334, 0.83334);
+            canvasBack.setWidth(canvasBack.getWidth() / 1.2);
+            canvasBack.setHeight(canvasBack.getHeight() / 1.2);
+
+            insertImagesToBack();
+            backStepRepository.getAllStepWhichPointNotNull().stream().forEach(s -> putPoint(graphicsContextBack, s, s.getPoint().getX(), s.getPoint().getY()));
+            maximiseCounters[0]--;
+
+        } else if (maximiseCounters[1] > 0) {
+
+            graphicsContextSagittal.clearRect(0, 0 , canvasSagittal.getWidth(), canvasSagittal.getHeight());
+            graphicsContextSagittal.scale(0.83334, 0.83334);
+            canvasSagittal.setWidth(canvasSagittal.getWidth() / 1.2);
+            canvasSagittal.setHeight(canvasSagittal.getHeight() / 1.2);
 
             insertImageToSagittal();
             sagittalStepRepository.getAllStepWhichPointNotNull().stream().forEach(s -> putPoint(graphicsContextSagittal, s, s.getPoint().getX(), s.getPoint().getY()));
+            maximiseCounters[1]--;
         }
     }
 }
