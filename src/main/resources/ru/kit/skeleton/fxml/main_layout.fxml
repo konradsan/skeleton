@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1000.0" prefWidth="900.0" stylesheets="@../css/buttons.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.kit.skeleton.controller.SkeletonController">
+    <children>
+        <GridPane prefHeight="90.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="75.0" minHeight="75.0" prefHeight="75.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="842.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="94.0" minHeight="10.0" prefHeight="83.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <GridPane style="-fx-background-color: #52616B;" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="621.0" minWidth="10.0" prefWidth="605.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="75.0" minHeight="75.0" prefHeight="75.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <ImageView fitHeight="26.0" fitWidth="26.0" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                            <image>
+                                <Image url="@../image/arrow.png" />
+                            </image>
+                        </ImageView>
+                        <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Опорно-двигательный аппарат" textFill="WHITE" GridPane.columnIndex="1">
+                            <font>
+                                <Font name="Calibri" size="24.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </GridPane>
+            <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <children>
+                    <Button id="cancel_button" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onCancel" prefHeight="45.0" text="Отмена" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+                        <GridPane.margin>
+                            <Insets left="10.0" right="10.0" />
+                        </GridPane.margin>
+                        <font>
+                            <Font name="Calibri" size="24.0" />
+                        </font>
+                        <HBox.margin>
+                            <Insets right="10.0" />
+                        </HBox.margin>
+                        <padding>
+                            <Insets left="30.0" right="30.0" />
+                        </padding>
+                    </Button>
+                    <Button id="ok_button" fx:id="buttonOk" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSave" prefHeight="45.0" text="ОК" GridPane.halignment="CENTER">
+                        <GridPane.margin>
+                            <Insets left="10.0" right="10.0" />
+                        </GridPane.margin>
+                        <font>
+                            <Font name="Calibri" size="24.0" />
+                        </font>
+                        <padding>
+                            <Insets left="40.0" right="40.0" />
+                        </padding>
+                    </Button>
+                </children>
+               <GridPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </GridPane.margin>
+            </HBox>
+            <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" tabMinHeight="40.0" tabMinWidth="100.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+              <tabs>
+                <Tab fx:id="tabBack" text="Фото спины">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="758.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <GridPane alignment="CENTER" minWidth="800.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                           <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                                               <children>
+                                                   <Label fx:id="stepNameBack" alignment="TOP_CENTER" prefHeight="17.0" prefWidth="196.0">
+                                                       <font>
+                                                           <Font size="22.0" />
+                                                       </font>
+                                                       <VBox.margin>
+                                                           <Insets />
+                                                       </VBox.margin>
+                                                   </Label>
+                                                   <TextArea fx:id="stepDescriptionBack" editable="false" prefHeight="122.0" prefWidth="197.0" wrapText="true">
+                                                       <VBox.margin>
+                                                           <Insets bottom="10.0" top="10.0" />
+                                                       </VBox.margin>
+                                                   </TextArea>
+                                                   <HBox alignment="TOP_CENTER" nodeOrientation="LEFT_TO_RIGHT">
+                                                       <children>
+                                                      <Button mnemonicParsing="false" text="лупа" onAction="#maximise">
+                                                         <HBox.margin>
+                                                            <Insets right="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                           <Button mnemonicParsing="false" onAction="#cancelLastStep" text="отменить" />
+                                                           <Button mnemonicParsing="false" onAction="#resetAllSteps" text="&gt; 0 &lt;">
+                                                               <HBox.margin>
+                                                                   <Insets left="10.0" right="10.0" />
+                                                               </HBox.margin>
+                                                           </Button>
+                                                      <Button fx:id="buttonNext" disable="true" mnemonicParsing="false" onAction="#nextPhoto" text="далее" />
+                                                       </children>
+                                                   </HBox>
+                                               </children>
+                                               <padding>
+                                                   <Insets left="50.0" right="50.0" top="150.0" />
+                                               </padding>
+                                           </VBox>
+                                          <ScrollPane>
+                                            <content>
+                                              <AnchorPane>
+                                                   <children>
+                                                      <Canvas fx:id="canvasBack" height="780.0" onMouseClicked="#onClickCanvasBack" width="450.0" AnchorPane.topAnchor="0.0" />
+                                                   </children>
+                                                   <padding>
+                                                      <Insets top="13.0" />
+                                                   </padding>
+                                                </AnchorPane>
+                                            </content>
+                                          </ScrollPane>
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab fx:id="tabSagittal" text="Фото сбоку">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="758.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <GridPane prefHeight="793.0" prefWidth="800.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <Canvas fx:id="canvasSagittal" height="780.0" onMouseClicked="#onClickCanvasSagittal" width="450.0" />
+                                          <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                                             <children>
+                                                <Label fx:id="stepNameSagittal" alignment="TOP_CENTER" prefHeight="17.0" prefWidth="196.0">
+                                                   <font>
+                                                      <Font size="22.0" />
+                                                   </font>
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <TextArea fx:id="stepDescriptionSagittal" editable="false" prefHeight="122.0" prefWidth="197.0" wrapText="true">
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" top="10.0" />
+                                                   </VBox.margin>
+                                                </TextArea>
+                                                <HBox alignment="TOP_CENTER" nodeOrientation="LEFT_TO_RIGHT">
+                                                   <children>
+                                                      <Button mnemonicParsing="false" onAction="#cancelLastStep" text="отменить" />
+                                                      <Button mnemonicParsing="false" onAction="#resetAllSteps" text="&gt; 0 &lt;">
+                                                         <HBox.margin>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                      <Button fx:id="buttonNextSagittal" disable="true" mnemonicParsing="false" onAction="#nextPhoto" text="далее" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                             <padding>
+                                                <Insets left="50.0" right="50.0" top="150.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </HBox>
+                           </children></AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+            <AnchorPane fx:id="anchorBlockLayout" opacity="0.63" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #A86F20;" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="980.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Button id="ok_button" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#onActionPhoto" text="Сделать фото">
+                                  <font>
+                                      <Font name="Calibri" size="24.0" />
+                                  </font>
+                              </Button>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="-50.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Button id="ok_button" fx:id="buttonAnalizeOldPhoto" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#onActionAnalyzePhoto" text="Анализ фото" visible="false">
+                                 <font>
+                                    <Font name="Calibri" size="24.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            </children>
+        </GridPane>
+    </children>
+</AnchorPane>
