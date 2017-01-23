@@ -17,6 +17,7 @@ public class Skeleton {
     }
 
     public static boolean hasPhoto() {
+        System.out.println(new File(path + IMAGE_NAME_BACK).getAbsolutePath());
         return new File(path + IMAGE_NAME_BACK).exists() && new File(path + IMAGE_NAME_SAGITTAL).exists();
     }
 

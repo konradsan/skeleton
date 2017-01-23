@@ -19,7 +19,7 @@ public class MainApp extends Application {
         Parent root = new Pane();
         primaryStage.setTitle("hi");
         primaryStage.setScene(new Scene(root));
-        Stage stage = new SkeletonStage(true, "D:\\projects\\ae\\skeleton1\\test\\");
+        Stage stage = new SkeletonStage(true, "C:\\combine\\Skeleton\\test\\");
 
         stage.show();
     }

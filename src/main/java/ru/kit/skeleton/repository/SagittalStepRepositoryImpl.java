@@ -1,5 +1,7 @@
 package ru.kit.skeleton.repository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.kit.skeleton.model.Step;
 
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.stream.Collectors;
  */
 public class SagittalStepRepositoryImpl implements ListRepository {
 
+    private static final Logger LOG = LoggerFactory.getLogger(SagittalStepRepositoryImpl.class);
     private List<Step> stepList = new ArrayList<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
@@ -25,9 +28,14 @@ public class SagittalStepRepositoryImpl implements ListRepository {
 
     @Override
     public Step get(int i) {
-        if (i < stepList.size()) {
-            return stepList.get(i);
+
+        if (i < stepList.size() && i >= 0) {
+            Step step = stepList.get(i);
+//            LOG.info("get Step id = {}, {}, {}", i, step, counter.get());
+            return step;
         }
+
+//        LOG.info("get Step id = {}, {}, {}", i, null, counter.get());
         return null;
     }
 
@@ -58,6 +66,7 @@ public class SagittalStepRepositoryImpl implements ListRepository {
 
     @Override
     public void setDefault() {
+        LOG.info("set default values");
         counter.set(0);
         stepList.stream().filter(step -> step.getPoint() != null).forEach(step -> step.setPoint(null));
     }
@@ -70,5 +79,10 @@ public class SagittalStepRepositoryImpl implements ListRepository {
     @Override
     public boolean isFullPoint() {
         return getAllStepWhichPointNotNull().size() == stepList.size();
+    }
+
+    @Override
+    public Step changeLast() {
+        return stepList.get(counter.get() - 2);
     }
 }

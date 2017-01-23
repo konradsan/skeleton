@@ -18,4 +18,5 @@ public interface ListRepository {
     boolean isFullPoint();
     void setDefault();
     Step getByName(String name);
+    Step changeLast();
 }

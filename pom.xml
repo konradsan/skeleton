@@ -7,9 +7,18 @@
     <groupId>ru.kit</groupId>
     <artifactId>skeleton</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <logback-version>1.1.7</logback-version>
+        <slf4j-version>1.7.21</slf4j-version>
+        <kinect-photo-maker-version>1.0</kinect-photo-maker-version>
+        <org.json-version>20160810</org.json-version>
+    </properties>
 
 
     <build>
+        <finalName>Skeleton</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -38,7 +47,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>tonometr.Main</mainClass>
+                            <mainClass>ru.kit.skeleton.MainApp</mainClass>
                         </manifest>
                     </archive>
 
@@ -59,19 +68,24 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.7.5</version>
-        </dependency>
-        <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20160810</version>
+            <version>${org.json-version}</version>
         </dependency>
         <dependency>
             <groupId>ru.kit.lib-for-kinekt</groupId>
             <artifactId>Kinect-photo-maker</artifactId>
-            <version>1.0</version>
+            <version>${kinect-photo-maker-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback-version}</version>
         </dependency>
     </dependencies>
 

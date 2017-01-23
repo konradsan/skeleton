@@ -235,8 +235,8 @@ public class ChromakeyImage {
                 ", angle_waist_belt=" + angle_waist_belt +
                 ", angle_shoulders=" + angle_shoulders +
                 ", angle_ears=" + angle_ears +
-                ", angle_waist=" + angle_waist +
-                ", recommendation='" + recommendation + '\'' +
+                ", angle_waist=" + angle_waist + System.lineSeparator() +
+                "recommendation='" + recommendation + '\'' +
                 '}';
     }
 }

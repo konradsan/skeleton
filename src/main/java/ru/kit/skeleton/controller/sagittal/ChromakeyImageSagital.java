@@ -81,4 +81,18 @@ public class ChromakeyImageSagital {
     private boolean equals(int x, int y, int eps) {
         return Math.abs(x - y) <= eps;
     }
+
+    @Override
+    public String toString() {
+        return "ChromakeyImageSagital{" +
+                "centerOfBody=" + centerOfBody +
+                ", topDistance=" + topDistance +
+                ", middleDistance=" + middleDistance +
+                ", bottomDistance=" + bottomDistance +
+                ", top=" + top +
+                ", middle=" + middle +
+                ", bottom=" + bottom + System.lineSeparator() +
+                "recommendation='" + recommendation + '\'' +
+                '}';
+    }
 }
