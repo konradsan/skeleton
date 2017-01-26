@@ -88,15 +88,16 @@ public class SkeletonController {
         LOG.info("------------------------------------------------------------");
         LOG.info("SAVE");
         LOG.info("------------------------------------------------------------");
-        ChromakeyImage back = new ChromakeyImage(backStepRepository.getByName("Правая подмышка").getPoint(), backStepRepository.getByName("Левая подмышка").getPoint(),
-                backStepRepository.getByName("Правое плечо").getPoint(), backStepRepository.getByName("Левое плечо").getPoint(), backStepRepository.getByName("Левая мочка уха").getPoint(),
-                backStepRepository.getByName("Правая мочка уха").getPoint(), backStepRepository.getByName("Левая точка талии").getPoint(), backStepRepository.getByName("Правая точка талии").getPoint(),
-                backStepRepository.getByName("Левая точка пояса").getPoint(), backStepRepository.getByName("Правая точка пояса").getPoint());
+        ChromakeyImage back = new ChromakeyImage(backStepRepository.getByName("Наивысшая точка подмышки справа").getPoint(), backStepRepository.getByName("Наивысшая точка подмышки слева").getPoint(),
+                backStepRepository.getByName("Правое плечо").getPoint(), backStepRepository.getByName("Левое плечо").getPoint(), backStepRepository.getByName("Мочка левого уха").getPoint(),
+                backStepRepository.getByName("Мочка правого уха").getPoint(), backStepRepository.getByName("Изгиб талии слева").getPoint(), backStepRepository.getByName("Изгиб талии справа").getPoint(),
+                backStepRepository.getByName("Край подвздошной кости слева").getPoint(), backStepRepository.getByName("Край подвздошной кости справа").getPoint(), backStepRepository.getByName("Центр пятки слева").getPoint(), backStepRepository.getByName("Центр пятки справа").getPoint());
         String backResult = back.getRecommendation();
+//        back.getSvg();
         LOG.info("back: {}", back);
 
         ChromakeyImageSagital sagittal = new ChromakeyImageSagital(sagittalStepRepository.getByName("Пятка").getPoint(), sagittalStepRepository.getByName("Носок").getPoint(),
-                sagittalStepRepository.getByName("Талия").getPoint(), sagittalStepRepository.getByName("Выпуклая часть спины").getPoint(), sagittalStepRepository.getByName("Шея").getPoint());
+                sagittalStepRepository.getByName("Поясничный лордоз").getPoint(), sagittalStepRepository.getByName("Грудной кифоз").getPoint(), sagittalStepRepository.getByName("Шейный лордоз").getPoint());
         String sagittalResult = sagittal.getRecommendation();
         LOG.info("sagittal: {}", sagittal);
         Map<String, String> map = new HashMap<>();
@@ -359,7 +360,7 @@ public class SkeletonController {
             stepDescription.setText(step.getDescription());
         } else if(repository.getAllStepWhichPointNotNull().size() == 0) {
             stepName.setText("Поставьте точку");
-            stepDescription.setText("Что бы начать поставьте точку двойным нажатием, далее двигайте точку пальцем, что бы установить ее в место согласно указаниям.");
+            stepDescription.setText("Чтобы начать поставьте точку двойным нажатием, далее двигайте точку пальцем, что бы установить ее в место согласно указаниям.");
         } else {
             stepName.setText("");
             stepDescription.setText("");
@@ -377,18 +378,18 @@ public class SkeletonController {
 
         graphicsContextSagittal.setStroke(Color.AQUA);
         graphicsContextBack.setStroke(Color.AQUA);
-        if (step.getName().equals("Правая подмышка") || step.getName().equals("Левая подмышка")) {
+        if (step.getName().equals("Наивысшая точка подмышки справа") || step.getName().equals("Наивысшая точка подмышки слева")) {
             graphicsContextBack.strokeLine(x + 1.5, y, x + 1.5, y - 120);
 
-        } else if (step.getName().equals("Правая мочка уха") && (step2 = backStepRepository.getByName("Левая мочка уха")) != null) {
+        } else if (step.getName().equals("Мочка правого уха") && (step2 = backStepRepository.getByName("Мочка левого уха")) != null) {
             graphicsContextBack.strokeLine(step.getPoint().getX(), step.getPoint().getY() + 1.5, step2.getPoint().getX(), step2.getPoint().getY() + 1.5);
         } else if (step.getName().equals("Правое плечо") && (step2 = backStepRepository.getByName("Левое плечо")) != null) {
             graphicsContextBack.strokeLine(step.getPoint().getX(), step.getPoint().getY() + 1.5, step2.getPoint().getX(), step2.getPoint().getY() + 1.5);
-        } else if (step.getName().equals("Правая точка талии") && (step2 = backStepRepository.getByName("Левая точка талии")) != null) {
+        } else if (step.getName().equals("Изгиб талии справа") && (step2 = backStepRepository.getByName("Изгиб талии слева")) != null) {
             graphicsContextBack.strokeLine(step.getPoint().getX(), step.getPoint().getY() + 1.5, step2.getPoint().getX(), step2.getPoint().getY() + 1.5);
-        } else if (step.getName().equals("Правая точка пояса") && (step2 = backStepRepository.getByName("Левая точка пояса")) != null) {
+        } else if (step.getName().equals("Край подвздошной кости справа") && (step2 = backStepRepository.getByName("Край подвздошной кости слева")) != null) {
             graphicsContextBack.strokeLine(step.getPoint().getX(), step.getPoint().getY() + 1.5, step2.getPoint().getX(), step2.getPoint().getY() + 1.5);
-        } else if (step.getName().equals("Правая граница ног") && (step2 = backStepRepository.getByName("Левая граница ног")) != null) {
+        } else if (step.getName().equals("Центр пятки справа") && (step2 = backStepRepository.getByName("Центр пятки слева")) != null) {
             graphicsContextBack.strokeLine(step.getPoint().getX(), step.getPoint().getY() + 1.5, step2.getPoint().getX(), step2.getPoint().getY() + 1.5);
             double centerX = (step.getPoint().getX() + step2.getPoint().getX()) / 2;
             double centerY = (step.getPoint().getY() + step2.getPoint().getY()) / 2;
@@ -402,7 +403,7 @@ public class SkeletonController {
             centerLineLegs.setLocation(centerX, centerY);
             graphicsContextSagittal.strokeLine(centerX, centerY, centerX, -canvasBack.getHeight());
 
-        } else if (step.getName().equals("Шея") || step.getName().equals("Талия") || step.getName().equals("Выпуклая часть спины") && centerLineLegs != null) {
+        } else if (step.getName().equals("Шейный лордоз") || step.getName().equals("Грудной кифоз") || step.getName().equals("Поясничный лордоз") && centerLineLegs != null) {
             graphicsContextSagittal.strokeLine(step.getPoint().getX(), step.getPoint().getY() + 1.5, centerLineLegs.getX(), step.getPoint().getY() + 1.5);
         }
 
@@ -517,6 +518,33 @@ public class SkeletonController {
 
             insertImage(graphicsContextBack, Skeleton.IMAGE_NAME_BACK);
             backStepRepository.getAllStepWhichPointNotNull().stream().forEach(s -> putPoint(graphicsContextBack, s, s.getPoint().getX(), s.getPoint().getY()));
+        }
+    }
+
+    public void onDraggedCanvasSagittal(MouseEvent event) {
+        Step step = sagittalStepRepository.changeLast();
+        Point point = null;
+
+        /* вычисляем множитель */
+        if (maximiseCounters[1] == 0) {
+            point = new Point((int)event.getX(), (int)event.getY() - 30);
+        } else {
+            double multiplier = 1;
+            for (int i = 0; i < maximiseCounters[1]; i++) {
+                multiplier *= 1.2;
+            }
+            point = new Point((int)(event.getX() / multiplier), (int)(event.getY() / multiplier) - 30);
+        }
+
+        LOG.info("moved to Point{x={}, y={}}", point.getX(), point.getY());
+
+        if (step != null) {
+            step.setPoint(point);
+
+            graphicsContextSagittal.clearRect(0, 0, canvasSagittal.getWidth(), canvasSagittal.getHeight());
+
+            insertImage(graphicsContextSagittal, Skeleton.IMAGE_NAME_SAGITTAL);
+            sagittalStepRepository.getAllStepWhichPointNotNull().stream().forEach(s -> putPoint(graphicsContextSagittal, s, s.getPoint().getX(), s.getPoint().getY()));
         }
     }
 }

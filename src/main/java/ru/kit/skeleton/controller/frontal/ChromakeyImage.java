@@ -2,6 +2,7 @@ package ru.kit.skeleton.controller.frontal;
 
 import java.awt.*;
 
+
 /**
  * Created by Anton on 28.06.2016.
  */
@@ -24,7 +25,7 @@ public class ChromakeyImage {
                 getVector(leftBelt, rightBelt)));
     }
 
-    public ChromakeyImage(Point rightArmpit, Point leftArmpit, Point rightArmpitUp, Point leftArmpitUp, Point leftEar, Point rightEar, Point leftWaist, Point rightWaist, Point leftBelt, Point rightBelt) {
+    public ChromakeyImage(Point rightArmpit, Point leftArmpit, Point rightArmpitUp, Point leftArmpitUp, Point leftEar, Point rightEar, Point leftWaist, Point rightWaist, Point leftBelt, Point rightBelt, Point leftFoot, Point rightFoot) {
         this.rightArmpit = rightArmpit;
         this.leftArmpit = leftArmpit;
         this.rightArmpitUp = rightArmpitUp;
@@ -33,7 +34,7 @@ public class ChromakeyImage {
         this.rightEar = rightEar;
         this.leftWaist = leftWaist;
         this.rightWaist = rightWaist;
-        this.centerOfBody = new Point((int)((leftWaist.x + rightWaist.x) / 2), (int)((leftWaist.y + rightWaist.y) / 2));
+        this.centerOfBody = new Point((int)((leftFoot.x + rightFoot.x) / 2), (int)((leftFoot.y + rightFoot.y) / 2));
         this.leftBelt = leftBelt;
         this.rightBelt = rightBelt;
 
@@ -42,6 +43,10 @@ public class ChromakeyImage {
         angle_waist_belt = Math.abs(calcAngle(getVector(leftWaist, rightWaist),
                 getVector(leftBelt, rightBelt)));
         paintAngleGraphics();
+
+        System.out.println(rightEarDist = Math.abs(rightEar.getX() - centerOfBody.getX()));
+        System.out.println(leftEarDist = Math.abs(leftEar.getX() - centerOfBody.getX()));
+
     }
 
     private void paintAngleGraphics() {
@@ -103,6 +108,7 @@ public class ChromakeyImage {
 
 
     private String recommendation = "";
+    private StringBuilder svg;
 
     public String getRecommendation() {
         if (recommendation.equals(""))
@@ -111,14 +117,19 @@ public class ChromakeyImage {
     }
 
     private void initRecommendation() {
+//        svg.append(PartSVG.BEGIN);
         // ОЦТ
         switch (compare(rightEarDist, leftEarDist, 10)) {
             case 1:
                 recommendation += "Неоптимальный статический стереотип: общий центр тяжести смещен вправо, опора на правую ногу.\n";
+//                svg.append(PartSVG.RIGHT_FOOT);
                 break;
             case -1:
                 recommendation += "Неоптимальный статический стереотип: общий центр тяжести смещен влево, опора преимущественно на левую ногу.\n";
+//                svg.append(PartSVG.LEFT_FOOT);
                 break;
+            default:
+//                svg.append(PartSVG.NORM_FOOT);
         }
         // шейный отдел
         boolean isNeck = false;
@@ -128,17 +139,25 @@ public class ChromakeyImage {
             if (leftEar.y > rightEar.y) {
                 isNeck = true;
                 neckString = "Голова наклонена влево, правое плечо выше левого.\n";
+//                svg.append(PartSVG.LEFT_HEAD);
+//                svg.append(PartSVG.LEFT_SHOLDER);
             } else if (leftEar.y < rightEar.y) {
                 isNeck = true;
                 neckString = "Голова наклонена вправо, левое плечо выше правого.\n";
+//                svg.append(PartSVG.RIGHT_HEAD);
+//                svg.append(PartSVG.RIGHT_SHOLDER);
             }
         } else {
             if (leftEar.y > rightEar.y) {
                 isNeck = true;
                 neckString = "Голова наклонена влево, левое плечо выше правого.\n";
+//                svg.append(PartSVG.LEFT_HEAD);
+//                svg.append(PartSVG.RIGHT_SHOLDER);
             } else {
                 isNeck = true;
                 neckString = "Голова наклонена вправо, правое плечо выше левого.\n";
+//                svg.append(PartSVG.RIGHT_HEAD);
+//                svg.append(PartSVG.LEFT_SHOLDER);
             }
         }
         // грудной отдел
@@ -201,7 +220,18 @@ public class ChromakeyImage {
             recommendation += brustString;
         if (isWaist)
             recommendation += waistString;
+
+//        svg.append();
     }
+
+//    public StringBuilder getSvg() {
+//        StringBuilder builder = new StringBuilder();
+//        builder.append(PartSVG.BEGIN).append(PartSVG.HEAD_NORM).append(PartSVG.SHOULDERS_NORM).append(PartSVG.LOVER_BACK_NORM).append(PartSVG.WAIST_NORM).append(PartSVG.FOOT_NORM).append(PartSVG.ENG);
+//        System.out.println(builder);
+//
+//
+//        return null;
+//    }
 
     private int compare(double x, double y, double eps) {
         if (equals(x, y, eps))

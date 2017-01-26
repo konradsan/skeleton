@@ -13,3 +13,8 @@
 #cancel_button:hover {
     -fx-background-color: #ff7a58;
 }
+
+.my_button {
+    -fx-padding: 15;
+    -fx-font-size: 18;
+}

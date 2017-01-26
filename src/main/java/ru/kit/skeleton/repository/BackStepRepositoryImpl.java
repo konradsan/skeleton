@@ -19,18 +19,18 @@ public class BackStepRepositoryImpl implements ListRepository {
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
-        stepList.add(new Step("Левая мочка уха", ""));
-        stepList.add(new Step("Правая мочка уха", ""));
-        stepList.add(new Step("Левая подмышка", ""));
-        stepList.add(new Step("Правая подмышка", ""));
+        stepList.add(new Step("Мочка левого уха", ""));
+        stepList.add(new Step("Мочка правого уха", ""));
+        stepList.add(new Step("Наивысшая точка подмышки слева", ""));
+        stepList.add(new Step("Наивысшая точка подмышки справа", ""));
         stepList.add(new Step("Левое плечо", ""));
         stepList.add(new Step("Правое плечо", ""));
-        stepList.add(new Step("Левая точка талии", ""));
-        stepList.add(new Step("Правая точка талии", ""));
-        stepList.add(new Step("Левая точка пояса", ""));
-        stepList.add(new Step("Правая точка пояса", ""));
-        stepList.add(new Step("Левая граница ног", ""));
-        stepList.add(new Step("Правая граница ног", ""));
+        stepList.add(new Step("Изгиб талии слева", ""));
+        stepList.add(new Step("Изгиб талии справа", ""));
+        stepList.add(new Step("Край подвздошной кости слева", ""));
+        stepList.add(new Step("Край подвздошной кости справа", ""));
+        stepList.add(new Step("Центр пятки слева", ""));
+        stepList.add(new Step("Центр пятки справа", ""));
 
     }
 

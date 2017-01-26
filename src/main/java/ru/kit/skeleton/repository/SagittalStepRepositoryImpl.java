@@ -21,9 +21,9 @@ public class SagittalStepRepositoryImpl implements ListRepository {
     {
         stepList.add(new Step("Пятка", ""));
         stepList.add(new Step("Носок", ""));
-        stepList.add(new Step("Талия", ""));
-        stepList.add(new Step("Выпуклая часть спины", ""));
-        stepList.add(new Step("Шея", ""));
+        stepList.add(new Step("Поясничный лордоз", "Изгиб в поясничном отделе позвоночника"));
+        stepList.add(new Step("Грудной кифоз", "Изгиб в грудном отделе позвоночника"));
+        stepList.add(new Step("Шейный лордоз", "Изгиб в шейном отделе позвоночника"));
     }
 
     @Override
