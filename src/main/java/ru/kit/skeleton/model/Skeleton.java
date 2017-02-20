@@ -1,27 +1,36 @@
 package ru.kit.skeleton.model;
 
 import java.io.File;
-import java.nio.file.Path;
 
 /**
  * Created by mikha on 13.01.2017.
  */
 public class Skeleton {
 
-    public static final String IMAGE_NAME_BACK = "back_photo.png";
-    public static final String IMAGE_NAME_SAGITTAL = "sagittal_photo.png";
-    private static String path;
+    public static final String ORIGIN_IMAGE_BACK = "back_photo.png";
+    public static final String ORIGIN_IMAGE_SAGITTAL = "sagittal_photo.png";
+    public static final String SVG_BACK = "back.svg";
+    public static final String SVG_SAGITTAL = "sagittal.svg";
+    public static final String RESULT_IMAGE_BACK = SVG_BACK + ".jpg";
+    public static final String RESULT_IMAGE_SAGITTAL = SVG_SAGITTAL + ".jpg";
+    private static String PATH;
+    private boolean isMan;
 
-    public Skeleton(String path) {
-        Skeleton.path = path;
+    public Skeleton(String path, boolean isMan) {
+        Skeleton.PATH = path;
+        this.isMan = isMan;
     }
 
     public static boolean hasPhoto() {
-        System.out.println(new File(path + IMAGE_NAME_BACK).getAbsolutePath());
-        return new File(path + IMAGE_NAME_BACK).exists() && new File(path + IMAGE_NAME_SAGITTAL).exists();
+        System.out.println(new File(PATH + ORIGIN_IMAGE_BACK).getAbsolutePath());
+        return new File(PATH + ORIGIN_IMAGE_BACK).exists() && new File(PATH + ORIGIN_IMAGE_SAGITTAL).exists();
     }
 
     public static String getPath() {
-        return path;
+        return PATH;
+    }
+
+    public boolean isMan() {
+        return isMan;
     }
 }

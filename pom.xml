@@ -16,6 +16,14 @@
         <org.json-version>20160810</org.json-version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>svn-export-repo</id>
+            <name>svn-export repository on GitHub</name>
+            <url>http://bripkens.github.com/svg-export/repository/</url>
+        </repository>
+    </repositories>
+
 
     <build>
         <finalName>Skeleton</finalName>
@@ -86,6 +94,26 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+        <dependency>
+            <groupId>de.bripkens</groupId>
+            <artifactId>svg-export</artifactId>
+            <version>0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.im4java</groupId>
+            <artifactId>im4java</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.kit</groupId>
+            <artifactId>scanme-report</artifactId>
+            <version>20170201_kinect</version>
         </dependency>
     </dependencies>
 

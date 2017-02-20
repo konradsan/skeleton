@@ -1,11 +1,23 @@
 package ru.kit.skeleton.util;
 
+import javafx.scene.shape.Rectangle;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.json.JSONObject;
+import ru.kit.skeleton.model.SVG;
+import ru.kit.skeleton.model.Skeleton;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by mikha on 19.01.2017.
@@ -50,4 +62,115 @@ public class Util {
 
         return jsonObject;
     }
+
+    public static void writeSVG(String path, Set<SVG.SVGPart> svgParts, String currentFileName) {
+        List<String> fileNames = svgParts.stream().map(svgPart -> {return path + svgPart.getFileName();}).collect(Collectors.toList());
+        sculptSVG(fileNames, currentFileName);
+
+        try {
+            svgToJpgConvert(currentFileName, 900, 1000);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TranscoderException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sculptSVG(List<String> fileNames, String currentFileName) {
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(currentFileName))) {
+            writer.append("<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
+                    "\t viewBox=\"0 0 612 792\" enable-background=\"new 0 0 612 792\" xml:space=\"preserve\">");
+
+            for (String fileName : fileNames) {
+                try(BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+                    while (reader.ready()) {
+                        String data = reader.readLine();
+                        writer.append(data);
+                    }
+                }
+            }
+            writer.append("</svg>");
+
+        } catch (IOException e)  {
+            e.printStackTrace();
+        }
+
+    }
+
+//    public static void svgToJpgConvert(String fileName) throws FileNotFoundException {
+//        new SVGExport().setInput(new FileInputStream(fileName + ".png"))
+//                .setOutput(new FileOutputStream(fileName + ".eps"))
+//                .setTranscoder(Format.SVG)
+//                .transcode();
+//    }
+
+    public static void svgToJpgConvert(String fileName, double width, double height) throws IOException, TranscoderException {
+        String svgURI = Paths.get(fileName).toUri().toURL().toString();
+        TranscoderInput inputSvgImage = new TranscoderInput(svgURI);
+
+        OutputStream pngOutputStream = new FileOutputStream(fileName + ".jpg");
+        TranscoderOutput outputPngImage = new TranscoderOutput(pngOutputStream);
+
+        JPEGTranscoder transcoder = new JPEGTranscoder();
+
+        transcoder.addTranscodingHint(JPEGTranscoder.KEY_QUALITY,
+                new Float(1.0));
+        transcoder.addTranscodingHint(JPEGTranscoder.KEY_WIDTH, new Float(width));
+        transcoder.addTranscodingHint(JPEGTranscoder.KEY_HEIGHT, new Float(height));
+        transcoder.transcode(inputSvgImage, outputPngImage);
+
+        pngOutputStream.flush();
+        pngOutputStream.close();
+    }
+
+
+
+    public static BufferedImage cropImage(String fileName) {
+        BufferedImage result = null;
+        try {
+            BufferedImage originImage = ImageIO.read(new File(fileName));
+            Point center = new Point(originImage.getWidth() / 2, originImage.getHeight() / 2);
+            System.out.println(originImage.getWidth());
+            System.out.println(originImage.getHeight());
+            Rectangle rect = null;
+            if (fileName.contains(Skeleton.RESULT_IMAGE_BACK)) {
+                rect = new Rectangle(center.getX() - 380, center.getY() - 500, 740, 860);
+            } else {
+                rect = new Rectangle(center.getX() - 110, center.getY() - 500, 180, 860);
+            }
+            result = originImage.getSubimage((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static void writeImage(BufferedImage image, String fileName) {
+        try {
+            ImageIO.write(image, "jpg", new File(fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    public static void main(String[] args) {
+        try {
+            Util.svgToJpgConvert("D:/projects/ae/skeleton1/test/back.svg", 900, 1000);
+            BufferedImage imageBack = Util.cropImage("D:/projects/ae/skeleton1/test/" + Skeleton.RESULT_IMAGE_BACK);
+            Util.writeImage(imageBack, "D:/projects/ae/skeleton1/test/" + Skeleton.RESULT_IMAGE_BACK);
+
+            Util.svgToJpgConvert("D:/projects/ae/skeleton1/test/sagittal.svg", 900, 1000);
+            BufferedImage sagittalBack = Util.cropImage("D:/projects/ae/skeleton1/test/" + Skeleton.RESULT_IMAGE_SAGITTAL);
+            Util.writeImage(sagittalBack, "D:/projects/ae/skeleton1/test/" + Skeleton.RESULT_IMAGE_SAGITTAL);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TranscoderException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
