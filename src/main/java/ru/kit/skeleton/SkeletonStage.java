@@ -21,7 +21,7 @@ import java.util.List;
 public class SkeletonStage extends Stage {
 
     private static final Logger LOG = LoggerFactory.getLogger(SkeletonStage.class);
-    SkeletonController controller;
+    private SkeletonController controller;
 
     public SkeletonStage(boolean isMan, String path) {
         try {

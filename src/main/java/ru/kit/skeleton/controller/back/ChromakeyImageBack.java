@@ -72,94 +72,103 @@ public class ChromakeyImageBack extends ChromakeyImage {
         // ОЦТ
         switch (compare((int) rightEarDist, (int) leftEarDist, 10)) {
             case 1:
-                recommendation.append("Общий центр тяжести смещен вправо, опора на правую ногу. ");
+                recommendation.append("Неоптимальный статический стереотип: общий центр тяжести смещен вправо, опора на правую ногу. ");
                 break;
             case -1:
-                recommendation.append("Общий центр тяжести смещен влево, опора на левую ногу. ");
+                recommendation.append("Неоптимальный статический стереотип: общий центр тяжести смещен влево, опора на левую ногу. ");
                 break;
             default:
         }
         // шейный отдел
         boolean isNeck = false;
         String neckString = "";
-        String frontNeckString = "Постуральный мышечный дисбаланс в шейном отделе позвоночника. ";
+        String frontNeckString = "Постуральный мышечный дисбаланс в шейном отделе позвоночника: ";
         if (angle_ears_shldrs <= 2) {
             if (leftEar.y > rightEar.y) {
                 isNeck = true;
-                neckString = "Голова наклонена влево, правое плечо выше левого. ";
+                neckString = "голова наклонена влево, правое плечо выше левого. ";
             } else if (leftEar.y < rightEar.y) {
                 isNeck = true;
-                neckString = "Голова наклонена вправо, левое плечо выше правого. ";
+                neckString = "голова наклонена вправо, левое плечо выше правого. ";
             }
         } else {
             if (leftEar.y > rightEar.y) {
                 isNeck = true;
-                neckString = "Голова наклонена влево, левое плечо выше правого. ";
+                neckString = "голова наклонена влево, левое плечо выше правого. ";
             } else {
                 isNeck = true;
-                neckString = "Голова наклонена вправо, правое плечо выше левого. ";
+                neckString = "голова наклонена вправо, правое плечо выше левого. ";
             }
         }
         // грудной отдел
         boolean isBrust = false;
         String brustString = "";
-        String frontBrustString = "Постуральный мышечный дисбаланс в грудном отделе позвоночника. ";
+        String frontBrustString = "Постуральный мышечный дисбаланс в грудном отделе позвоночника: ";
         if (angle_shldrs_waist <= 2) {
             if (leftArmpitUp.y != rightArmpitUp.y) {
                 isBrust = true;
-                brustString = "Границы грудного региона справа и слева асимметричны. ";
+                brustString = "границы грудного региона справа и слева асимметричны. ";
             }
         } else {
             if (angle_shoulders > 2)
                 if (leftArmpitUp.y > rightArmpitUp.y) {
                     isBrust = true;
-                    brustString = "Верхняя и нижняя границы грудного региона слева приближены друг к другу,  справа - взаимоудалены. ";
+                    brustString = "верхняя и нижняя границы грудного региона слева приближены друг к другу,  справа - взаимоудалены. ";
                 } else {
                     isBrust = true;
-                    brustString = "Верхняя и нижняя границы грудного региона справа приближены друг к другу, слева - взаимоудалены. ";
+                    brustString = "верхняя и нижняя границы грудного региона справа приближены друг к другу, слева - взаимоудалены. ";
                 }
         }
         // поясничный отдел
         boolean isWaist = false;
         String waistString = "";
-        String frontWaistString = "Постуральный мышечный дисбаланс в поясничном отделе позвоночника. ";
+        String frontWaistString = "Постуральный мышечный дисбаланс в поясничном отделе позвоночника: ";
         if (angle_waist_belt <= 2) {
             if (leftWaist.y != rightWaist.y) {
                 isWaist = true;
-                waistString = "Границы поясничного региона справа и слева асимметричны. ";
+                waistString = "границы поясничного региона справа и слева асимметричны. ";
             }
         } else {
             if (angle_waist > 2)
                 if (leftWaist.y > rightWaist.y) {
                     isWaist = true;
-                    waistString = "Верхняя и нижняя границы поясничного региона слева приближены друг к другу,  справа - взаимоудалены. ";
+                    waistString = "верхняя и нижняя границы поясничного региона слева приближены друг к другу,  справа - взаимоудалены. ";
                 } else {
                     isWaist = true;
-                    waistString = "Верхняя и нижняя границы поясничного региона справа приближены друг к другу, слева - взаимоудалены. ";
+                    waistString = "верхняя и нижняя границы поясничного региона справа приближены друг к другу, слева - взаимоудалены. ";
                 }
         }
 
-        if (isNeck && isBrust && !isWaist)
-            recommendation.append("Постуральный мышечный дисбаланс в шейном и грудном отделах позвоночника. ");
-        else if (isNeck && !isBrust && isWaist)
-            recommendation.append("Постуральный мышечный дисбаланс в шейном и поясничном отделах позвоночника. ");
-        else if (isNeck && isBrust && isWaist)
-            recommendation.append("Постуральный мышечный дисбаланс во всех трех отделах отделах позвоночника (шейный, грудной, поясничный). ");
-        else if (!isNeck && isBrust && isWaist)
-            recommendation.append("Постуральный мышечный дисбаланс в грудном и поясничном отделах позвоночника. ");
-        else if (isNeck)
-            recommendation.append(frontNeckString);
-        else if (isBrust)
-            recommendation.append(frontBrustString);
-        else if (isWaist)
-            recommendation.append(frontWaistString);
+//        if (isNeck && isBrust && !isWaist)
+//            recommendation.append("Постуральный мышечный дисбаланс в шейном и грудном отделах позвоночника. ");
+//        else if (isNeck && !isBrust && isWaist)
+//            recommendation.append("Постуральный мышечный дисбаланс в шейном и поясничном отделах позвоночника. ");
+//        else if (isNeck && isBrust && isWaist)
+//            recommendation.append("Постуральный мышечный дисбаланс во всех трех отделах отделах позвоночника (шейный, грудной, поясничный). ");
+//        else if (!isNeck && isBrust && isWaist)
+//            recommendation.append("Постуральный мышечный дисбаланс в грудном и поясничном отделах позвоночника. ");
+//        else if (isNeck)
+//            recommendation.append(frontNeckString);
+//        else if (isBrust)
+//            recommendation.append(frontBrustString);
+//        else if (isWaist)
+//            recommendation.append(frontWaistString);
 
-        if (isNeck)
+        if (isNeck) {
+            recommendation.append(frontNeckString);
             recommendation.append(neckString);
-        if (isBrust)
+        }
+
+        if (isBrust) {
+            recommendation.append(frontBrustString);
             recommendation.append(brustString);
-        if (isWaist)
+        }
+
+        if (isWaist) {
+            recommendation.append(frontWaistString);
             recommendation.append(waistString);
+        }
+
     }
 
     @Override

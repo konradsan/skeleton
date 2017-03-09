@@ -39,8 +39,6 @@ public class ChromakeyImageSagittal extends ChromakeyImage {
             case -1:
                 recommendation.append("Общий центр тяжести смещен назад. ");
                 break;
-            default:
-                recommendation.append("При боковом анализе смещения общего центра тяжести не выявлено. ");
         }
 
         // грудной

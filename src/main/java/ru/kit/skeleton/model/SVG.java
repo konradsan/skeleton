@@ -10,7 +10,7 @@ import ru.kit.skeleton.repository.SagittalPlane;
 public class SVG {
 
     public static String getPath(boolean isMan, Plane plane) {
-        StringBuilder path = new StringBuilder("SVGpart\\");
+        StringBuilder path = new StringBuilder("kinect\\SVGpart\\");
         if (isMan) path.append("male\\");
         else path.append("woman\\");
 

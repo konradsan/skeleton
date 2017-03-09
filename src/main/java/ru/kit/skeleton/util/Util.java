@@ -27,7 +27,7 @@ public class Util {
     {
         try {
             String jsonFileName = path + "skeleton.json";
-            BufferedWriter writer = new BufferedWriter(new FileWriter(jsonFileName));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(jsonFileName), "UTF-8"));
             Throwable var2 = null;
 
             try {
@@ -68,7 +68,7 @@ public class Util {
         sculptSVG(fileNames, currentFileName);
 
         try {
-            svgToJpgConvert(currentFileName, 900, 1000);
+            svgToJpgConvert(currentFileName, 900, 1100);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TranscoderException e) {
@@ -108,8 +108,8 @@ public class Util {
         String svgURI = Paths.get(fileName).toUri().toURL().toString();
         TranscoderInput inputSvgImage = new TranscoderInput(svgURI);
 
-        OutputStream pngOutputStream = new FileOutputStream(fileName + ".jpg");
-        TranscoderOutput outputPngImage = new TranscoderOutput(pngOutputStream);
+        OutputStream jpgOutputStream = new FileOutputStream(fileName + ".jpg");
+        TranscoderOutput outputPngImage = new TranscoderOutput(jpgOutputStream);
 
         JPEGTranscoder transcoder = new JPEGTranscoder();
 
@@ -119,8 +119,10 @@ public class Util {
         transcoder.addTranscodingHint(JPEGTranscoder.KEY_HEIGHT, new Float(height));
         transcoder.transcode(inputSvgImage, outputPngImage);
 
-        pngOutputStream.flush();
-        pngOutputStream.close();
+        jpgOutputStream.flush();
+        jpgOutputStream.close();
+
+//        new File(fileName).delete();
     }
 
 
@@ -134,9 +136,9 @@ public class Util {
             System.out.println(originImage.getHeight());
             Rectangle rect = null;
             if (fileName.contains(Skeleton.RESULT_IMAGE_BACK)) {
-                rect = new Rectangle(center.getX() - 380, center.getY() - 500, 740, 860);
+                rect = new Rectangle(center.getX() - 380, center.getY() - 400, 740, 860);
             } else {
-                rect = new Rectangle(center.getX() - 110, center.getY() - 500, 180, 860);
+                rect = new Rectangle(center.getX() - 110, center.getY() - 400, 180, 860);
             }
             result = originImage.getSubimage((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight());
         } catch (IOException e) {
