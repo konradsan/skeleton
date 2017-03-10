@@ -68,7 +68,7 @@ public class Util {
         sculptSVG(fileNames, currentFileName);
 
         try {
-            svgToJpgConvert(currentFileName, 900, 1100);
+            svgToJpgConvert(currentFileName, 900, 1000);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TranscoderException e) {

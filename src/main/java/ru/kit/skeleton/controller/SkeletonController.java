@@ -31,7 +31,6 @@ import ru.kit.skeleton.controller.sagittal.ChromakeyImageSagittal;
 import ru.kit.skeleton.model.SVG;
 import ru.kit.skeleton.model.Skeleton;
 import ru.kit.skeleton.model.Step;
-import ru.kit.skeleton.report.ReportAdapter;
 import ru.kit.skeleton.repository.*;
 import ru.kit.skeleton.util.Util;
 
