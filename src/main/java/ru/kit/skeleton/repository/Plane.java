@@ -57,7 +57,7 @@ public abstract class Plane implements ListRepository {
 
     @Override
     public boolean isFullPoint() {
-        return getAllStepWhichPointNotNull().size() == stepList.size();
+        return getAllStepWhichPointNotNull().size() == stepList.size()-1;
     }
 
     @Override

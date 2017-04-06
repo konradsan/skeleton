@@ -23,8 +23,7 @@ import java.util.stream.Collectors;
  * Created by mikha on 19.01.2017.
  */
 public class Util {
-    public static void writeJSON(String path, Map<String, String> map)
-    {
+    public static void writeJSON(String path, Map<String, String> map) {
         try {
             String jsonFileName = path + "skeleton.json";
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(jsonFileName), "UTF-8"));
@@ -51,8 +50,7 @@ public class Util {
         }
     }
 
-    private static JSONObject createJSON(Map<String, String> map)
-    {
+    private static JSONObject createJSON(Map<String, String> map) {
 
         JSONObject jsonObject = new JSONObject();
 
@@ -64,16 +62,16 @@ public class Util {
     }
 
     public static void writeSVG(String path, Set<SVG.SVGPart> svgParts, String currentFileName) {
-        List<String> fileNames = svgParts.stream().map(svgPart -> {return path + svgPart.getFileName();}).collect(Collectors.toList());
-        sculptSVG(fileNames, currentFileName);
-
         try {
+            List<String> fileNames = svgParts.stream().map(svgPart -> path + svgPart.getFileName()).collect(Collectors.toList());
+            sculptSVG(fileNames, currentFileName);
+            System.out.println("Starting converting " + currentFileName + " to JPG");
             svgToJpgConvert(currentFileName, 900, 1000);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TranscoderException e) {
+            System.out.println("SVG Converted to JPG");
+        } catch (IOException | TranscoderException e) {
             e.printStackTrace();
         }
+
     }
 
     public static void sculptSVG(List<String> fileNames, String currentFileName) {
@@ -126,7 +124,6 @@ public class Util {
     }
 
 
-
     public static BufferedImage cropImage(String fileName) {
         BufferedImage result = null;
         try {
@@ -140,7 +137,7 @@ public class Util {
             } else {
                 rect = new Rectangle(center.getX() - 110, center.getY() - 400, 180, 860);
             }
-            result = originImage.getSubimage((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight());
+            result = originImage.getSubimage((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -156,23 +153,24 @@ public class Util {
     }
 
 
-
     public static void main(String[] args) {
+        /* Util.svgToJpgConvert("D:/nikitaSolovyevProjects/skeleton/test/back.svg", 900, 1000);
+         BufferedImage imageBack = Util.cropImage("D:/nikitaSolovyevProjects/skeleton/test/" + Skeleton.RESULT_IMAGE_BACK);
+         Util.writeImage(imageBack, "D:/nikitaSolovyevProjects/skeleton/test/" + Skeleton.RESULT_IMAGE_BACK);*/
+
         try {
-            Util.svgToJpgConvert("D:/projects/ae/skeleton1/test/back.svg", 900, 1000);
-            BufferedImage imageBack = Util.cropImage("D:/projects/ae/skeleton1/test/" + Skeleton.RESULT_IMAGE_BACK);
-            Util.writeImage(imageBack, "D:/projects/ae/skeleton1/test/" + Skeleton.RESULT_IMAGE_BACK);
-
-            Util.svgToJpgConvert("D:/projects/ae/skeleton1/test/sagittal.svg", 900, 1000);
-            BufferedImage sagittalBack = Util.cropImage("D:/projects/ae/skeleton1/test/" + Skeleton.RESULT_IMAGE_SAGITTAL);
-            Util.writeImage(sagittalBack, "D:/projects/ae/skeleton1/test/" + Skeleton.RESULT_IMAGE_SAGITTAL);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TranscoderException e) {
+            Util.svgToJpgConvert("D:/nikitaSolovyevProjects/skeleton/test/back.svg", 900, 1000);
+            BufferedImage imageBack = null;//Util.cropImage(Skeleton.getPath() + Skeleton.RESULT_IMAGE_BACK);
+            imageBack = ImageIO.read(new File("D:/nikitaSolovyevProjects/skeleton/test/" + Skeleton.RESULT_IMAGE_BACK));
+            Util.writeImage(imageBack, "D:/nikitaSolovyevProjects/skeleton/test/" + Skeleton.RESULT_IMAGE_BACK);
+        } catch (IOException | TranscoderException e) {
             e.printStackTrace();
         }
+          /*  Util.svgToJpgConvert("D:/projects/ae/skeleton1/test/sagittal.svg", 900, 1000);
+            BufferedImage sagittalBack = Util.cropImage("D:/projects/ae/skeleton1/test/" + Skeleton.RESULT_IMAGE_SAGITTAL);
+            Util.writeImage(sagittalBack, "D:/projects/ae/skeleton1/test/" + Skeleton.RESULT_IMAGE_SAGITTAL);*/
+
+
     }
 
 }

@@ -76,3 +76,16 @@ public abstract class ChromakeyImage {
 
     protected abstract void initSVGpic();
 }
+
+class Test{
+    public static void main(String[] args) {
+        Point leftEar = new Point(50, 40);
+        Point rightEar = new Point(80, 20);
+
+        Point leftShl = new Point(30, 60);
+        Point rigtShl = new Point(90, 40);
+
+
+
+    }
+}

@@ -7,6 +7,7 @@ import ru.kit.skeleton.model.Step;
  */
 public class BackPlane extends Plane {
     {
+        getStepList().add(new Step("", "Для начала нажмите - далее"));
         getStepList().add(new Step("Мочка левого уха", ""));
         getStepList().add(new Step("Мочка правого уха", ""));
         getStepList().add(new Step("Наивысшая точка подмышки слева", ""));

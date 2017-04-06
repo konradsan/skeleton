@@ -81,25 +81,31 @@ public class ChromakeyImageBack extends ChromakeyImage {
         }
         // шейный отдел
         boolean isNeck = false;
-        String neckString = "";
-        String frontNeckString = "Постуральный мышечный дисбаланс в шейном отделе позвоночника: ";
-        if (angle_ears_shldrs <= 2) {
-            if (leftEar.y > rightEar.y) {
+        boolean isHeadTilted = false;
+
+        StringBuilder stringBuilder = new StringBuilder("Постуральный мышечный дисбаланс в шейном отделе позвоночника: ");
+        if(!(angle_ears_shldrs<=2)){
+            if(leftEar.y>rightEar.y){
+                stringBuilder.append("голова наклонена влево");
+                isHeadTilted = true;
                 isNeck = true;
-                neckString = "голова наклонена влево, правое плечо выше левого. ";
-            } else if (leftEar.y < rightEar.y) {
+            }else if(leftEar.y < rightEar.y){
+                stringBuilder.append("голова наклонена вправо");
+                isHeadTilted = true;
                 isNeck = true;
-                neckString = "голова наклонена вправо, левое плечо выше правого. ";
             }
-        } else {
-            if (leftEar.y > rightEar.y) {
+            if(leftArmpitUp.y>rightArmpitUp.y){
+                if(isHeadTilted) stringBuilder.append(", ");
+                stringBuilder.append("правое плечо выше левого");
                 isNeck = true;
-                neckString = "голова наклонена влево, левое плечо выше правого. ";
-            } else {
+            }else if(leftArmpitUp.y<rightArmpitUp.y){
+                if(isHeadTilted) stringBuilder.append(", ");
+                stringBuilder.append("левое плечо выше правого");
                 isNeck = true;
-                neckString = "голова наклонена вправо, правое плечо выше левого. ";
             }
         }
+        stringBuilder.append(".");//Ставим точку в конце
+
         // грудной отдел
         boolean isBrust = false;
         String brustString = "";
@@ -155,8 +161,8 @@ public class ChromakeyImageBack extends ChromakeyImage {
 //            recommendation.append(frontWaistString);
 
         if (isNeck) {
-            recommendation.append(frontNeckString);
-            recommendation.append(neckString);
+            recommendation.append(stringBuilder.toString());
+
         }
 
         if (isBrust) {

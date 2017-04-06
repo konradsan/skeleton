@@ -21,15 +21,15 @@ import java.util.List;
 public class SkeletonStage extends Stage {
 
     private static final Logger LOG = LoggerFactory.getLogger(SkeletonStage.class);
+    public static Skeleton skeleton;
     private SkeletonController controller;
 
     public SkeletonStage(boolean isMan, String path) {
         try {
-            Skeleton skeleton = new Skeleton(path, isMan);
+            skeleton = new Skeleton(path, isMan);
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ru/kit/skeleton/fxml/main_layout.fxml"));
             Parent root = loader.load();
             controller = loader.getController();
-            controller.setSkeleton(skeleton);
             controller.setStage(this);
             setTitle("Опорно-двигательный аппарат");
 

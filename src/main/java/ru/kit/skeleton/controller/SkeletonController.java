@@ -2,9 +2,7 @@ package ru.kit.skeleton.controller;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
+import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,15 +12,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.input.TouchEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.kit.skeleton.SkeletonStage;
@@ -53,7 +50,6 @@ public class SkeletonController {
     private SkeletonStage stage;
     private Plane backPlane = new BackPlane();
     private Plane sagittalPlane = new SagittalPlane();
-    private Skeleton skeleton;
 
     public Button buttonNextSagittal;
     public Button buttonNextBack;
@@ -70,15 +66,14 @@ public class SkeletonController {
     public Button buttonAnalizeOldPhoto;
     public AnchorPane anchorBlockLayout;
 
+    public ImageView exampleBackImageView, exampleSagittalImageView;
+
     private GraphicsContext gcBack;
     private GraphicsContext gcSagittal;
 
-    private static final int CANVAS_WEIGHT = 350;
-    private static final int CANVAS_HEIGHT = 580;
+    private static final int CANVAS_WEIGHT = 350;//350; 548
+    private static final int CANVAS_HEIGHT = 580;//580; 906
 
-    public void setSkeleton(Skeleton skeleton) {
-        this.skeleton = skeleton;
-    }
     public void setStage(Stage stage) {
         this.stage = (SkeletonStage) stage;
     }
@@ -96,6 +91,15 @@ public class SkeletonController {
         gcSagittal = canvasSagittal.getGraphicsContext2D();
         canvasSagittal.setWidth(CANVAS_WEIGHT);
         canvasSagittal.setHeight(CANVAS_HEIGHT);
+
+        //Load example svg
+        if(SkeletonStage.skeleton.isMan()){
+            exampleBackImageView.setImage(new Image(this.getClass().getResource("/ru/kit/skeleton/image/norm_examples/male-back-norm_min.png").toString()));
+            exampleSagittalImageView.setImage(new Image(this.getClass().getResource("/ru/kit/skeleton/image/norm_examples/male-sagittal-norm_min.png").toString()));
+        }else{
+            exampleBackImageView.setImage(new Image(this.getClass().getResource("/ru/kit/skeleton/image/norm_examples/woman-back-norm_min.png").toString()));
+            exampleSagittalImageView.setImage(new Image(this.getClass().getResource("/ru/kit/skeleton/image/norm_examples/woman-sagittal-norm_min.png").toString()));
+        }
 
         if (Skeleton.hasPhoto()) {
             buttonAnalizeOldPhoto.setVisible(true);
@@ -153,7 +157,7 @@ public class SkeletonController {
                 backPlane.getByName("Край подвздошной кости слева").getPoint(), backPlane.getByName("Край подвздошной кости справа").getPoint(), backPlane.getByName("Центр пятки слева").getPoint(), backPlane.getByName("Центр пятки справа").getPoint());
         String backResult = back.getRecommendation();
         LOG.info("back recommendation: {}", backResult);
-        Util.writeSVG(SVG.getPath(skeleton.isMan(), backPlane), back.getSvgParts(), Skeleton.getPath() + Skeleton.SVG_BACK);
+        Util.writeSVG(SVG.getPath(SkeletonStage.skeleton.isMan(), backPlane), back.getSvgParts(), Skeleton.getPath() + Skeleton.SVG_BACK);
         LOG.info("write SVG {}", Skeleton.getPath() + Skeleton.SVG_BACK);
         BufferedImage imageBack = Util.cropImage(Skeleton.getPath() + Skeleton.RESULT_IMAGE_BACK);
         Util.writeImage(imageBack, Skeleton.getPath() + Skeleton.RESULT_IMAGE_BACK);
@@ -162,11 +166,11 @@ public class SkeletonController {
     }
 
     private String getRecommendationAndWriteSvgAndImageSagittal() {
-        ChromakeyImageSagittal sagittal = new ChromakeyImageSagittal(sagittalPlane.getByName("Пятка").getPoint(), sagittalPlane.getByName("Носок").getPoint(),
+        ChromakeyImageSagittal sagittal = new ChromakeyImageSagittal(sagittalPlane.getByName("Пятка").getPoint(), sagittalPlane.getByName("Кончик большого пальца стопы").getPoint(),
                 sagittalPlane.getByName("Поясничный лордоз").getPoint(), sagittalPlane.getByName("Грудной кифоз").getPoint(), sagittalPlane.getByName("Шейный лордоз").getPoint(), sagittalPlane.getByName("Наивысшая точка на голове").getPoint());
         String sagittalResult = sagittal.getRecommendation();
         LOG.info("sagittal recommendation: {}", sagittalResult);
-        Util.writeSVG(SVG.getPath(skeleton.isMan(), sagittalPlane), sagittal.getSvgParts(), Skeleton.getPath() + "sagittal.svg");
+        Util.writeSVG(SVG.getPath(SkeletonStage.skeleton.isMan(), sagittalPlane), sagittal.getSvgParts(), Skeleton.getPath() + "sagittal.svg");
         LOG.info("write SVG {}", Skeleton.getPath() + Skeleton.SVG_SAGITTAL);
         BufferedImage imageSagittal = Util.cropImage(Skeleton.getPath() + Skeleton.RESULT_IMAGE_SAGITTAL);
         Util.writeImage(imageSagittal, Skeleton.getPath() + Skeleton.RESULT_IMAGE_SAGITTAL);
@@ -179,7 +183,7 @@ public class SkeletonController {
         if (tabBack.isSelected()) {
             Step step = backPlane.getNext();
             if (step == null) {
-                step = new Step("Точки проставлены", "Переходите к сагиттальному анализу.");
+                step = new Step("Точки проставлены", "Переходите к анализу фотографии сбоку.");
                 initialFields(step, stepNameBack, stepDescriptionBack);
                 buttonNextBack.setDisable(true);
             }
@@ -271,7 +275,7 @@ public class SkeletonController {
         Point point = null;
         Step step = sagittalPlane.getThis();
 
-        if (step != null && step.getPoint() == null) {
+        if (step != null && step.getPoint() == null && !step.getName().equals("")) {
             double multiplier = getMultiplier(maximiseCounters[1]);
             point = new Point((int)(event.getX() / multiplier), (int)(event.getY() / multiplier));
 
@@ -292,7 +296,8 @@ public class SkeletonController {
         Step step = backPlane.getThis();
             /* вычисляем множитель */
 
-        if (step != null && step.getPoint() == null) {
+        if (step != null && step.getPoint() == null && !step.getName().equals("")) {
+            System.err.println("AAAAA");
             double multiplier = getMultiplier(maximiseCounters[0]);
             point = new Point((int)(event.getX() / multiplier), (int)(event.getY() / multiplier));
 
@@ -365,7 +370,7 @@ public class SkeletonController {
             double centerY = (step.getPoint().getY() + step2.getPoint().getY()) / 2;
             gcBack.strokeLine(centerX, centerY, centerX, -canvasBack.getHeight());
 
-        } else if (step.getName().equals("Носок") && (step2 = sagittalPlane.getByName("Пятка")) != null) {
+        } else if (step.getName().equals("Кончик большого пальца стопы") && (step2 = sagittalPlane.getByName("Пятка")) != null) {
             gcSagittal.strokeLine(step.getPoint().getX(), step.getPoint().getY() + 1.5, step2.getPoint().getX(), step2.getPoint().getY() + 1.5);
             double centerX = (step.getPoint().getX() + step2.getPoint().getX()) / 2;
             double centerY = (step.getPoint().getY() + step2.getPoint().getY()) / 2;
@@ -378,7 +383,7 @@ public class SkeletonController {
         }
 
         gc.setFill(Color.GREENYELLOW);
-        gc.fillRect(x, y, 4, 4);
+        gc.fillOval(x, y, 4, 4);
     }
 
 
@@ -454,13 +459,21 @@ public class SkeletonController {
         }
     }
 
+    EventHandler filetrNoScroll = (EventHandler<ScrollEvent>) eh -> {
+        if (eh.getDeltaY() != 0 || eh.getDeltaX() != 0) {
+            eh.consume();
+        }
+    };
+
     public void onDraggedCanvasBack(MouseEvent event) {
 
         if (editBack.isSelected()) {
-            scrollPaneBack.addEventFilter(TouchEvent.ANY, eh -> event.consume());
-            scrollPaneBack.addEventFilter(ScrollEvent.ANY, eh -> event.consume());
+
+            scrollPaneBack.addEventFilter(ScrollEvent.SCROLL, filetrNoScroll);
 
             Step step = backPlane.getThis();
+            if(step.getName().equals("")) return;
+
             Point point = null;
 
         /* вычисляем множитель */
@@ -483,16 +496,16 @@ public class SkeletonController {
                 backPlane.getAllStepWhichPointNotNull().stream().forEach(s -> putPoint(gcBack, s, s.getPoint().getX(), s.getPoint().getY()));
             }
         } else {
-            scrollPaneBack.removeEventFilter(TouchEvent.ANY, eh -> event.consume());
-            scrollPaneBack.removeEventFilter(ScrollEvent.ANY, eh -> event.consume());
+            scrollPaneBack.removeEventFilter(ScrollEvent.SCROLL, filetrNoScroll);
         }
     }
 
     public void onDraggedCanvasSagittal(MouseEvent event) {
 
         if (editSagittal.isSelected()) {
-            scrollPaneSagittal.addEventFilter(TouchEvent.ANY, eh -> event.consume());
+            scrollPaneSagittal.addEventFilter(ScrollEvent.ANY, filetrNoScroll);
             Step step = sagittalPlane.getThis();
+            if(step.getName().equals("")) return;
             Point point = null;
 
         /* вычисляем множитель */
@@ -517,14 +530,16 @@ public class SkeletonController {
                 sagittalPlane.getAllStepWhichPointNotNull().stream().forEach(s -> putPoint(gcSagittal, s, s.getPoint().getX(), s.getPoint().getY()));
             }
         } else {
-            scrollPaneSagittal.removeEventFilter(TouchEvent.ANY, eh -> event.consume());
+            scrollPaneSagittal.removeEventFilter(ScrollEvent.ANY, filetrNoScroll);
         }
     }
 
     private void insertImage(GraphicsContext gc, String imageName) {
         Image image = new Image("file:\\" + Skeleton.getPath() + imageName);
         PixelReader reader = image.getPixelReader();
-        WritableImage writableImage = new WritableImage(reader, 100, 300, 350, 580);
+        //Обрезка подогнанная под рамку. Исходные размеры окна фотки на экране 1920*1080(548х906)  Левый верхний угол обрезки(85;282) Ширина/Высота(343;565)
+        WritableImage writableImage = new WritableImage(reader, (int)(image.getWidth()*0.156), (int)(image.getHeight()*0.312),
+                (int)(image.getWidth()*0.626), (int)(image.getHeight()*0.624));//
         gc.drawImage(writableImage, 0, 0);
     }
 
@@ -568,12 +583,12 @@ public class SkeletonController {
         protected Void call() throws Exception {
             while (!this.isCancelled()) {
 
-                if (backPlane.getThis().getPoint() != null) {
+                if (backPlane.getThis().getPoint() != null || backPlane.getThis().getName().equals("")) {
                     buttonNextBack.setDisable(false);
                 } else {
                     buttonNextBack.setDisable(true);
                 }
-                if (sagittalPlane.getThis().getPoint() != null) {
+                if (sagittalPlane.getThis().getPoint() != null || sagittalPlane.getThis().getName().equals("")) {
                     buttonNextSagittal.setDisable(false);
                 } else {
                     buttonNextSagittal.setDisable(true);
