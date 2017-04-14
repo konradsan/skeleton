@@ -135,7 +135,7 @@ public class ChromakeyImageBack extends ChromakeyImage {
                 waistString = "границы поясничного региона справа и слева асимметричны. ";
             }
         } else {
-            if (angle_waist > 2)
+            if (angle_waist_belt > 2)
                 if (leftWaist.y > rightWaist.y) {
                     isWaist = true;
                     waistString = "верхняя и нижняя границы поясничного региона слева приближены друг к другу,  справа - взаимоудалены. ";

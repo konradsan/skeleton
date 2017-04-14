@@ -13,7 +13,8 @@ import java.awt.*;
 public class ChromakeyImageSagittal extends ChromakeyImage {
     Point centerOfBody;
     Point top;
-    int topDistance, middleDistance, bottomDistance;
+    private int topDistance, middleDistance, bottomDistance;
+    private double coefMiddle, coefBottom;
 
     public ChromakeyImageSagittal(Point heel, Point sock, Point waist, Point back, Point neck, Point top) {
         recommendation = new StringBuilder("");
@@ -22,14 +23,13 @@ public class ChromakeyImageSagittal extends ChromakeyImage {
         this.middleDistance = Math.abs(back.x - centerOfBody.x);
         this.bottomDistance = Math.abs(waist.x - centerOfBody.x);
         this.top = top;
+        this.coefMiddle = (double) middleDistance / (double) topDistance;
+        this.coefBottom = (double) bottomDistance / (double) topDistance;
     }
 
     //Point top, middle, bottom;
 
     // ============== RECOMMENDATIONS ==============================
-    private double coefMiddle = (double) middleDistance / (double) topDistance;
-    private double coefBottom = (double) bottomDistance / (double) topDistance;
-
     public void initRecommendation() {
         // ОЦТ
         switch (compare(centerOfBody.x, (int) top.getX(), 10)) {
