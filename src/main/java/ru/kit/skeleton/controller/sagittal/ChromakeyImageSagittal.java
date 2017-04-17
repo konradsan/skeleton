@@ -3,7 +3,9 @@ package ru.kit.skeleton.controller.sagittal;
 //import ru.kit.photoanalysis.back.ImageContourModel;
 
 import ru.kit.skeleton.controller.ChromakeyImage;
+import ru.kit.skeleton.controller.SkeletonController;
 import ru.kit.skeleton.model.SVG;
+import ru.kit.skeleton.model.Skeleton;
 
 import java.awt.*;
 
@@ -34,10 +36,31 @@ public class ChromakeyImageSagittal extends ChromakeyImage {
         // ОЦТ
         switch (compare(centerOfBody.x, (int) top.getX(), 10)) {
             case 1:
-                recommendation.append("Общий центр тяжести смещен вперед. ");
+                if(SkeletonController.commonCentrOfGravity.equals("right")){
+                    recommendation.append("Неоптимальный статический стереотип: общий центр тяжести смещен вперед и вправо, опора на правую ногу. ");
+                }else if(SkeletonController.commonCentrOfGravity.equals("left")){
+                    recommendation.append("Неоптимальный статический стереотип: общий центр тяжести смещен вперед и влево, опора на левую ногу. ");
+                }
+                else {
+                    recommendation.append("Общий центр тяжести смещен вперед. ");
+                }
                 break;
             case -1:
-                recommendation.append("Общий центр тяжести смещен назад. ");
+                if(SkeletonController.commonCentrOfGravity.equals("right")){
+                    recommendation.append("Неоптимальный статический стереотип: общий центр тяжести смещен назад и вправо, опора на правую ногу. ");
+                }else if(SkeletonController.commonCentrOfGravity.equals("left")){
+                    recommendation.append("Неоптимальный статический стереотип: общий центр тяжести смещен назад и влево, опора на левую ногу. ");
+                }
+                else {
+                    recommendation.append("Общий центр тяжести смещен назад. ");
+                }
+                break;
+            case 0:
+                if(SkeletonController.commonCentrOfGravity.equals("right")){
+                    recommendation.append("Неоптимальный статический стереотип: общий центр тяжести смещен вправо, опора на правую ногу. ");
+                }else if(SkeletonController.commonCentrOfGravity.equals("left")){
+                    recommendation.append("Неоптимальный статический стереотип: общий центр тяжести смещен влево, опора на левую ногу. ");
+                }
                 break;
         }
 

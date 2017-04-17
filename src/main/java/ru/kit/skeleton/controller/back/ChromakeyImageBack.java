@@ -1,6 +1,7 @@
 package ru.kit.skeleton.controller.back;
 
 import ru.kit.skeleton.controller.ChromakeyImage;
+import ru.kit.skeleton.controller.SkeletonController;
 import ru.kit.skeleton.model.SVG;
 
 import java.awt.*;
@@ -72,10 +73,10 @@ public class ChromakeyImageBack extends ChromakeyImage {
         // ОЦТ
         switch (compare((int) rightEarDist, (int) leftEarDist, 10)) {
             case 1:
-                recommendation.append("Неоптимальный статический стереотип: общий центр тяжести смещен вправо, опора на правую ногу. ");
+                SkeletonController.commonCentrOfGravity = "right";
                 break;
             case -1:
-                recommendation.append("Неоптимальный статический стереотип: общий центр тяжести смещен влево, опора на левую ногу. ");
+                SkeletonController.commonCentrOfGravity = "left";
                 break;
             default:
         }

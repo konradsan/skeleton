@@ -74,6 +74,8 @@ public class SkeletonController {
     private static final int CANVAS_WEIGHT = 350;//350; 548
     private static final int CANVAS_HEIGHT = 580;//580; 906
 
+    public static String commonCentrOfGravity = "";
+
     public void setStage(Stage stage) {
         this.stage = (SkeletonStage) stage;
     }
