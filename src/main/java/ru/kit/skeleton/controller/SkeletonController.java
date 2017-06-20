@@ -299,7 +299,6 @@ public class SkeletonController {
             /* вычисляем множитель */
 
         if (step != null && step.getPoint() == null && !step.getName().equals("")) {
-            System.err.println("AAAAA");
             double multiplier = getMultiplier(maximiseCounters[0]);
             point = new Point((int)(event.getX() / multiplier), (int)(event.getY() / multiplier));
 
@@ -339,7 +338,7 @@ public class SkeletonController {
     private Point centerLineLegs;
     private void putPoint(GraphicsContext gc, Step step, double x, double y) {
         Step step2 = null;
-        double centerPoint = 2.0;
+        double centerPoint = 1.0;
         gc.setStroke(Color.AQUA);
 
         if (step.getName().equals("Правое плечо")) {
@@ -385,7 +384,7 @@ public class SkeletonController {
         }
 
         gc.setFill(Color.GREENYELLOW);
-        gc.fillOval(x, y, 4, 4);
+        gc.fillOval(x, y, 2, 2);
     }
 
 
@@ -543,6 +542,12 @@ public class SkeletonController {
         WritableImage writableImage = new WritableImage(reader, (int)(image.getWidth()*0.156), (int)(image.getHeight()*0.312),
                 (int)(image.getWidth()*0.626), (int)(image.getHeight()*0.624));//
         gc.drawImage(writableImage, 0, 0);
+        //GRID--------------------------------
+        Image backGround = new Image("/ru/kit/skeleton/image/grid.png");
+        PixelReader backGroundPixelReader = backGround.getPixelReader();
+        WritableImage writableBackGround = new WritableImage(backGroundPixelReader, (int)(image.getWidth()*0.156), (int)(image.getHeight()*0.312),
+                (int)(image.getWidth()*0.626), (int)(image.getHeight()*0.624));//
+        gc.drawImage(writableBackGround, 0, 0);
     }
 
     private Task<Void> startPhotoMaker = new Task<Void>() {
