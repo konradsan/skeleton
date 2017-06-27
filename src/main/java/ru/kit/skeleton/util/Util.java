@@ -75,12 +75,12 @@ public class Util {
     }
 
     public static void sculptSVG(List<String> fileNames, String currentFileName) {
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(currentFileName))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(currentFileName))) {
             writer.append("<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
                     "\t viewBox=\"0 0 612 792\" enable-background=\"new 0 0 612 792\" xml:space=\"preserve\">");
 
             for (String fileName : fileNames) {
-                try(BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+                try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
                     while (reader.ready()) {
                         String data = reader.readLine();
                         writer.append(data);
@@ -89,7 +89,7 @@ public class Util {
             }
             writer.append("</svg>");
 
-        } catch (IOException e)  {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -126,7 +126,9 @@ public class Util {
 
     public static BufferedImage cropImage(String fileName) {
         BufferedImage result = null;
+        BufferedImage buf = null;
         try {
+            buf = ImageIO.read(new File(fileName));
             BufferedImage originImage = ImageIO.read(new File(fileName));
             Point center = new Point(originImage.getWidth() / 2, originImage.getHeight() / 2);
             System.out.println(originImage.getWidth());

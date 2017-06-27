@@ -2,6 +2,7 @@ package ru.kit.skeleton.controller;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -535,19 +536,44 @@ public class SkeletonController {
         }
     }
 
+    private BufferedImage getScaledImage(BufferedImage src, int w, int h){
+        int finalw = w;
+        int finalh = h;
+        double factor = 1.0d;
+        if(src.getWidth() > src.getHeight()){
+            factor = ((double)src.getHeight()/(double)src.getWidth());
+            finalh = (int)(finalw * factor);
+        }else{
+            factor = ((double)src.getWidth()/(double)src.getHeight());
+            finalw = (int)(finalh * factor);
+        }
+        BufferedImage resizedImg = new BufferedImage(finalw, finalh, BufferedImage.TRANSLUCENT);
+        Graphics2D g2 = resizedImg.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2.drawImage(src, 0, 0, finalw, finalh, null);
+        g2.dispose();
+        return resizedImg;
+    }
+
     private void insertImage(GraphicsContext gc, String imageName) {
         Image image = new Image("file:\\" + Skeleton.getPath() + imageName);
+        BufferedImage buf= SwingFXUtils.fromFXImage(image, null);
+        buf=getScaledImage(buf, 900, 580);
         PixelReader reader = image.getPixelReader();
         //Обрезка подогнанная под рамку. Исходные размеры окна фотки на экране 1920*1080(548х906)  Левый верхний угол обрезки(85;282) Ширина/Высота(343;565)
-        WritableImage writableImage = new WritableImage(reader, (int)(image.getWidth()*0.156), (int)(image.getHeight()*0.312),
-                (int)(image.getWidth()*0.626), (int)(image.getHeight()*0.624));//
-        gc.drawImage(writableImage, 0, 0);
+//        WritableImage writableImage = new WritableImage(reader, (int)(image.getWidth()*0.156), (int)(image.getHeight()*0.312),
+//                (int)(image.getWidth()*0.626), (int)(image.getHeight()*0.624));//
+        WritableImage writableImage = new WritableImage(reader, (int)(image.getWidth()*0.156), (int)(image.getHeight()*0.312),350, 600);//
+
+        gc.drawImage(SwingFXUtils.toFXImage(buf, null), 0, 0);
         //GRID--------------------------------
         Image backGround = new Image("/ru/kit/skeleton/image/grid.png");
+        buf=SwingFXUtils.fromFXImage(backGround, null);
+        buf=getScaledImage(buf, 900, 580);
         PixelReader backGroundPixelReader = backGround.getPixelReader();
-        WritableImage writableBackGround = new WritableImage(backGroundPixelReader, (int)(image.getWidth()*0.156), (int)(image.getHeight()*0.312),
-                (int)(image.getWidth()*0.626), (int)(image.getHeight()*0.624));//
-        gc.drawImage(writableBackGround, 0, 0);
+//        WritableImage writableBackGround = new WritableImage(backGroundPixelReader, (int)(image.getWidth()*0.156), (int)(image.getHeight()*0.312),
+//                (int)(image.getWidth()*0.626), (int)(image.getHeight()*0.624));//
+        gc.drawImage(SwingFXUtils.toFXImage(buf, null), 0, 0);
     }
 
     private Task<Void> startPhotoMaker = new Task<Void>() {
