@@ -32,7 +32,7 @@ public class ChromakeyImageBack extends ChromakeyImage {
         this.rightEar = rightEar;
         this.leftWaist = leftWaist;
         this.rightWaist = rightWaist;
-        this.centerOfBody = new Point((int)((leftFoot.x + rightFoot.x) / 2), (int)((leftFoot.y + rightFoot.y) / 2));
+        this.centerOfBody = new Point((int) ((leftFoot.x + rightFoot.x) / 2), (int) ((leftFoot.y + rightFoot.y) / 2));
         this.leftBelt = leftBelt;
         this.rightBelt = rightBelt;
 
@@ -85,22 +85,22 @@ public class ChromakeyImageBack extends ChromakeyImage {
         boolean isHeadTilted = false;
 
         StringBuilder stringBuilder = new StringBuilder("Постуральный мышечный дисбаланс в шейном отделе позвоночника: ");
-        if(!(angle_ears_shldrs<=2)){
-            if(leftEar.y>rightEar.y){
+        if (!(angle_ears_shldrs <= 2)) {
+            if (leftEar.y > rightEar.y) {
                 stringBuilder.append("голова наклонена влево");
                 isHeadTilted = true;
                 isNeck = true;
-            }else if(leftEar.y < rightEar.y){
+            } else if (leftEar.y < rightEar.y) {
                 stringBuilder.append("голова наклонена вправо");
                 isHeadTilted = true;
                 isNeck = true;
             }
-            if(leftArmpitUp.y>rightArmpitUp.y){
-                if(isHeadTilted) stringBuilder.append(", ");
+            if (leftArmpitUp.y > rightArmpitUp.y) {
+                if (isHeadTilted) stringBuilder.append(", ");
                 stringBuilder.append("правое плечо выше левого");
                 isNeck = true;
-            }else if(leftArmpitUp.y<rightArmpitUp.y){
-                if(isHeadTilted) stringBuilder.append(", ");
+            } else if (leftArmpitUp.y < rightArmpitUp.y) {
+                if (isHeadTilted) stringBuilder.append(", ");
                 stringBuilder.append("левое плечо выше правого");
                 isNeck = true;
             }
@@ -229,10 +229,12 @@ public class ChromakeyImageBack extends ChromakeyImage {
         int maxLimit = 10;
 
         if (angle > minLimit) {
-            if (angle < maxLimit) svgParts.add(SVG.SVGPart.valueOf(String.format(namePart, name.toUpperCase(), "RIGHT", 5)));
+            if (angle < maxLimit)
+                svgParts.add(SVG.SVGPart.valueOf(String.format(namePart, name.toUpperCase(), "RIGHT", 5)));
             else svgParts.add(SVG.SVGPart.valueOf(String.format(namePart, name.toUpperCase(), "RIGHT", 10)));
         } else if (angle < minLimit) {
-            if (angle > -maxLimit) svgParts.add(SVG.SVGPart.valueOf(String.format(namePart, name.toUpperCase(), "LEFT", 5)));
+            if (angle > -maxLimit)
+                svgParts.add(SVG.SVGPart.valueOf(String.format(namePart, name.toUpperCase(), "LEFT", 5)));
             else svgParts.add(SVG.SVGPart.valueOf(String.format(namePart, name.toUpperCase(), "LEFT", 10)));
         } else {
             svgParts.add(SVG.SVGPart.valueOf(String.format(namePart, name.toUpperCase(), "NORM", 0)));

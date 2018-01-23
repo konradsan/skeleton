@@ -80,6 +80,7 @@ public class SkeletonController {
     public void setStage(Stage stage) {
         this.stage = (SkeletonStage) stage;
     }
+
     public List<Task> getTasks() {
         return tasks;
     }
@@ -96,10 +97,10 @@ public class SkeletonController {
         canvasSagittal.setHeight(CANVAS_HEIGHT);
 
         //Load example svg
-        if(SkeletonStage.skeleton.isMan()){
+        if (SkeletonStage.skeleton.isMan()) {
             exampleBackImageView.setImage(new Image(this.getClass().getResource("/ru/kit/skeleton/image/norm_examples/male-back-norm_min.png").toString()));
             exampleSagittalImageView.setImage(new Image(this.getClass().getResource("/ru/kit/skeleton/image/norm_examples/male-sagittal-norm_min.png").toString()));
-        }else{
+        } else {
             exampleBackImageView.setImage(new Image(this.getClass().getResource("/ru/kit/skeleton/image/norm_examples/woman-back-norm_min.png").toString()));
             exampleSagittalImageView.setImage(new Image(this.getClass().getResource("/ru/kit/skeleton/image/norm_examples/woman-sagittal-norm_min.png").toString()));
         }
@@ -130,7 +131,6 @@ public class SkeletonController {
         t.setDaemon(true);
         t.start();
     }
-
 
 
     @FXML
@@ -280,7 +280,7 @@ public class SkeletonController {
 
         if (step != null && step.getPoint() == null && !step.getName().equals("")) {
             double multiplier = getMultiplier(maximiseCounters[1]);
-            point = new Point((int)(event.getX() / multiplier), (int)(event.getY() / multiplier));
+            point = new Point((int) (event.getX() / multiplier), (int) (event.getY() / multiplier));
 
             LOG.info("Point{x={}, y={}}", point.getX(), point.getY());
 
@@ -301,7 +301,7 @@ public class SkeletonController {
 
         if (step != null && step.getPoint() == null && !step.getName().equals("")) {
             double multiplier = getMultiplier(maximiseCounters[0]);
-            point = new Point((int)(event.getX() / multiplier), (int)(event.getY() / multiplier));
+            point = new Point((int) (event.getX() / multiplier), (int) (event.getY() / multiplier));
 
             LOG.info("Point{x={}, y={}}", point.getX(), point.getY());
 
@@ -337,6 +337,7 @@ public class SkeletonController {
     }
 
     private Point centerLineLegs;
+
     private void putPoint(GraphicsContext gc, Step step, double x, double y) {
         Step step2 = null;
         double centerPoint = 1.0;
@@ -390,6 +391,7 @@ public class SkeletonController {
 
 
     private int maximiseCounters[] = new int[2];
+
     private double getMultiplier(int maximiseCounter) {
         double multiplier = 1;
         if (maximiseCounter != 0) {
@@ -399,7 +401,9 @@ public class SkeletonController {
         }
         return multiplier;
     }
+
     private final double ZOOM = 1.2;
+
     public void maximise(ActionEvent event) {
         if (tabBack.isSelected() && maximiseCounters[0] < 7) {
             zoomImage(gcBack, backPlane, 0, Skeleton.ORIGIN_IMAGE_BACK);
@@ -414,8 +418,8 @@ public class SkeletonController {
         for (int i = 0; i < zoom; i++) {
             gc.scale(1.2, 1.2);
         }
-        gc.getCanvas().setWidth(gc.getCanvas().getWidth() * ZOOM *4);
-        gc.getCanvas().setHeight(gc.getCanvas().getHeight() * ZOOM *4);
+        gc.getCanvas().setWidth(gc.getCanvas().getWidth() * ZOOM * 4);
+        gc.getCanvas().setHeight(gc.getCanvas().getHeight() * ZOOM * 4);
         insertImageOnBackCanvas();
         backPlane.getAllStepWhichPointNotNull().stream().forEach(s -> putPoint(gcBack, s, s.getPoint().getX(), s.getPoint().getY()));
         maximiseCounters[0] += zoom;
@@ -450,7 +454,7 @@ public class SkeletonController {
         } else if (tabSagittal.isSelected() && maximiseCounters[1] > 0) {
             LOG.info("sagittal maximise x {}", (maximiseCounters[1] - 1) * ZOOM);
 
-            gcSagittal.clearRect(0, 0 , canvasSagittal.getWidth(), canvasSagittal.getHeight());
+            gcSagittal.clearRect(0, 0, canvasSagittal.getWidth(), canvasSagittal.getHeight());
             gcSagittal.scale(0.83334, 0.83334);
             canvasSagittal.setWidth(canvasSagittal.getWidth() / ZOOM);
             canvasSagittal.setHeight(canvasSagittal.getHeight() / ZOOM);
@@ -474,19 +478,19 @@ public class SkeletonController {
             scrollPaneBack.addEventFilter(ScrollEvent.SCROLL, filetrNoScroll);
 
             Step step = backPlane.getThis();
-            if(step.getName().equals("")) return;
+            if (step.getName().equals("")) return;
 
             Point point = null;
 
         /* вычисляем множитель */
             if (maximiseCounters[0] == 0) {
-                point = new Point((int)event.getX(), (int)event.getY() - 30);
+                point = new Point((int) event.getX(), (int) event.getY() - 30);
             } else {
                 double multiplier = 1;
                 for (int i = 0; i < maximiseCounters[0]; i++) {
                     multiplier *= 1.2;
                 }
-                point = new Point((int)(event.getX() / multiplier), (int)(event.getY() / multiplier) - 30);
+                point = new Point((int) (event.getX() / multiplier), (int) (event.getY() / multiplier) - 30);
             }
 
             LOG.info("moved to Point{x={}, y={}}", point.getX(), point.getY());
@@ -507,7 +511,7 @@ public class SkeletonController {
         if (editSagittal.isSelected()) {
             scrollPaneSagittal.addEventFilter(ScrollEvent.ANY, filetrNoScroll);
             Step step = sagittalPlane.getThis();
-            if(step.getName().equals("")) return;
+            if (step.getName().equals("")) return;
             Point point = null;
 
         /* вычисляем множитель */
@@ -536,16 +540,16 @@ public class SkeletonController {
         }
     }
 
-    private BufferedImage getScaledImage(BufferedImage src, int w, int h){
+    private BufferedImage getScaledImage(BufferedImage src, int w, int h) {
         int finalw = w;
         int finalh = h;
         double factor = 1.0d;
-        if(src.getWidth() > src.getHeight()){
-            factor = ((double)src.getHeight()/(double)src.getWidth());
-            finalh = (int)(finalw * factor);
-        }else{
-            factor = ((double)src.getWidth()/(double)src.getHeight());
-            finalw = (int)(finalh * factor);
+        if (src.getWidth() > src.getHeight()) {
+            factor = ((double) src.getHeight() / (double) src.getWidth());
+            finalh = (int) (finalw * factor);
+        } else {
+            factor = ((double) src.getWidth() / (double) src.getHeight());
+            finalw = (int) (finalh * factor);
         }
         BufferedImage resizedImg = new BufferedImage(finalw, finalh, BufferedImage.TRANSLUCENT);
         Graphics2D g2 = resizedImg.createGraphics();
@@ -557,22 +561,18 @@ public class SkeletonController {
 
     private void insertImage(GraphicsContext gc, String imageName) {
         Image image = new Image("file:\\" + Skeleton.getPath() + imageName);
-        BufferedImage buf= SwingFXUtils.fromFXImage(image, null);
-        buf=getScaledImage(buf, 900, 580);
+        BufferedImage buf = SwingFXUtils.fromFXImage(image, null);
+        buf = getScaledImage(buf, 900, 595);
         PixelReader reader = image.getPixelReader();
-        //Обрезка подогнанная под рамку. Исходные размеры окна фотки на экране 1920*1080(548х906)  Левый верхний угол обрезки(85;282) Ширина/Высота(343;565)
-//        WritableImage writableImage = new WritableImage(reader, (int)(image.getWidth()*0.156), (int)(image.getHeight()*0.312),
-//                (int)(image.getWidth()*0.626), (int)(image.getHeight()*0.624));//
-        WritableImage writableImage = new WritableImage(reader, (int)(image.getWidth()*0.156), (int)(image.getHeight()*0.312),350, 600);//
 
         gc.drawImage(SwingFXUtils.toFXImage(buf, null), 0, 0);
+
         //GRID--------------------------------
         Image backGround = new Image("/ru/kit/skeleton/image/grid.png");
-        buf=SwingFXUtils.fromFXImage(backGround, null);
-        buf=getScaledImage(buf, 900, 580);
+        buf = SwingFXUtils.fromFXImage(backGround, null);
+        buf = getScaledImage(buf, 900, 595);
         PixelReader backGroundPixelReader = backGround.getPixelReader();
-//        WritableImage writableBackGround = new WritableImage(backGroundPixelReader, (int)(image.getWidth()*0.156), (int)(image.getHeight()*0.312),
-//                (int)(image.getWidth()*0.626), (int)(image.getHeight()*0.624));//
+
         gc.drawImage(SwingFXUtils.toFXImage(buf, null), 0, 0);
     }
 
@@ -581,7 +581,7 @@ public class SkeletonController {
         protected Void call() throws Exception {
             LOG.info("start photo maker");
 
-            ProcessBuilder builder = new ProcessBuilder("cmd", "/C", "\"" + System.getProperty("java.home") + "/bin/java\"" +" -jar kinect\\Kinect-photo-maker.jar " + Skeleton.getPath());
+            ProcessBuilder builder = new ProcessBuilder("cmd", "/C", "\"" + System.getProperty("java.home") + "/bin/java\"" + " -jar kinect\\Kinect-photo-maker.jar " + Skeleton.getPath());
             Process process = builder.start();
             while (process.isAlive() && !this.isCancelled()) {
                 LOG.info("wait...");
@@ -633,7 +633,7 @@ public class SkeletonController {
                     buttonOk.setDisable(true);
                 }
 
-                try{
+                try {
                     Thread.sleep(300);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
