@@ -1,11 +1,16 @@
 package ru.kit.skeleton.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 
 /**
  * Created by mikha on 13.01.2017.
  */
 public class Skeleton {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Skeleton.class);
 
     public static final String ORIGIN_IMAGE_BACK = "back_photo.png";
     public static final String ORIGIN_IMAGE_SAGITTAL = "sagittal_photo.png";
@@ -22,8 +27,10 @@ public class Skeleton {
     }
 
     public static boolean hasPhoto() {
-        System.out.println(new File(PATH + ORIGIN_IMAGE_BACK).getAbsolutePath());
-        return new File(PATH + ORIGIN_IMAGE_BACK).exists() && new File(PATH + ORIGIN_IMAGE_SAGITTAL).exists();
+        LOG.info(new File(PATH + ORIGIN_IMAGE_BACK).getAbsolutePath());
+        boolean filesExists = new File(PATH + ORIGIN_IMAGE_BACK).exists() && new File(PATH + ORIGIN_IMAGE_SAGITTAL).exists();
+        LOG.info("Old files " + (filesExists ? "exists" : "not exists"));
+        return filesExists;
     }
 
     public static String getPath() {

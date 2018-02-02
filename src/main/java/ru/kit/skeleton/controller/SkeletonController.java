@@ -15,7 +15,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -134,12 +133,12 @@ public class SkeletonController {
 
 
     @FXML
-    public void onCancel(ActionEvent event) {
+    public void onCancel() {
         stage.close(!buttonOk.isDisable());
     }
 
     @FXML
-    public void onSave(ActionEvent event) {
+    public void onSave() {
         LOG.info("------------------------ SAVE ------------------------");
         String backResult = getRecommendationAndWriteSvgAndImageBack();
         String sagittalResult = getRecommendationAndWriteSvgAndImageSagittal();
@@ -182,7 +181,7 @@ public class SkeletonController {
     }
 
     @FXML
-    public void nextStep(ActionEvent event) {
+    public void nextStep() {
         if (tabBack.isSelected()) {
             Step step = backPlane.getNext();
             if (step == null) {
@@ -217,7 +216,7 @@ public class SkeletonController {
     }
 
     @FXML
-    public void resetAllSteps(ActionEvent event) {
+    public void resetAllSteps() {
         if (tabBack.isSelected()) {
             LOG.info("reset back image");
             backPlane.setDefault();
@@ -242,8 +241,8 @@ public class SkeletonController {
     }
 
     @FXML
-    public void cancelLastStep(ActionEvent event) {
-        Step step = null;
+    public void cancelLastStep() {
+        Step step;
         if (tabBack.isSelected()) {
             step = backPlane.getThis();
             if (step != null) {
@@ -295,7 +294,7 @@ public class SkeletonController {
         LOG.info("------------------------------------------------------------");
         LOG.info("ON CLICK BAG CANVAS");
         LOG.info("------------------------------------------------------------");
-        Point point = null;
+        Point point;
         Step step = backPlane.getThis();
             /* вычисляем множитель */
 
@@ -312,14 +311,14 @@ public class SkeletonController {
     }
 
     @FXML
-    public void onActionPhoto(ActionEvent event) {
+    public void onActionPhoto() {
         Thread t = new Thread(startPhotoMaker);
         t.setDaemon(true);
         t.start();
     }
 
     @FXML
-    public void onActionAnalyzePhoto(ActionEvent event) {
+    public void onActionAnalyzePhoto() {
         anchorBlockLayout.setVisible(false);
         initialFields(backPlane.getThis(), stepNameBack, stepDescriptionBack);
         initialFields(sagittalPlane.getThis(), stepNameSagittal, stepDescriptionSagittal);
@@ -339,7 +338,7 @@ public class SkeletonController {
     private Point centerLineLegs;
 
     private void putPoint(GraphicsContext gc, Step step, double x, double y) {
-        Step step2 = null;
+        Step step2;
         double centerPoint = 1.0;
         gc.setStroke(Color.AQUA);
 
@@ -404,7 +403,7 @@ public class SkeletonController {
 
     private final double ZOOM = 1.2;
 
-    public void maximise(ActionEvent event) {
+    public void maximise() {
         if (tabBack.isSelected() && maximiseCounters[0] < 7) {
             zoomImage(gcBack, backPlane, 0, Skeleton.ORIGIN_IMAGE_BACK);
 
@@ -438,7 +437,7 @@ public class SkeletonController {
         maximiseCounters[counters]++;
     }
 
-    public void minimise(ActionEvent event) {
+    public void minimise() {
         if (tabBack.isSelected() && maximiseCounters[0] > 0) {
             LOG.info("back maximise x {}", (maximiseCounters[0] - 1) * ZOOM);
 
@@ -465,7 +464,7 @@ public class SkeletonController {
         }
     }
 
-    EventHandler filetrNoScroll = (EventHandler<ScrollEvent>) eh -> {
+    private EventHandler<ScrollEvent> filterNoScroll = eh -> {
         if (eh.getDeltaY() != 0 || eh.getDeltaX() != 0) {
             eh.consume();
         }
@@ -475,12 +474,12 @@ public class SkeletonController {
 
         if (editBack.isSelected()) {
 
-            scrollPaneBack.addEventFilter(ScrollEvent.SCROLL, filetrNoScroll);
+            scrollPaneBack.addEventFilter(ScrollEvent.SCROLL, filterNoScroll);
 
             Step step = backPlane.getThis();
             if (step.getName().equals("")) return;
 
-            Point point = null;
+            Point point;
 
         /* вычисляем множитель */
             if (maximiseCounters[0] == 0) {
@@ -502,17 +501,17 @@ public class SkeletonController {
                 backPlane.getAllStepWhichPointNotNull().stream().forEach(s -> putPoint(gcBack, s, s.getPoint().getX(), s.getPoint().getY()));
             }
         } else {
-            scrollPaneBack.removeEventFilter(ScrollEvent.SCROLL, filetrNoScroll);
+            scrollPaneBack.removeEventFilter(ScrollEvent.SCROLL, filterNoScroll);
         }
     }
 
     public void onDraggedCanvasSagittal(MouseEvent event) {
 
         if (editSagittal.isSelected()) {
-            scrollPaneSagittal.addEventFilter(ScrollEvent.ANY, filetrNoScroll);
+            scrollPaneSagittal.addEventFilter(ScrollEvent.ANY, filterNoScroll);
             Step step = sagittalPlane.getThis();
             if (step.getName().equals("")) return;
-            Point point = null;
+            Point point;
 
         /* вычисляем множитель */
             if (maximiseCounters[1] == 0) {
@@ -536,14 +535,14 @@ public class SkeletonController {
                 sagittalPlane.getAllStepWhichPointNotNull().stream().forEach(s -> putPoint(gcSagittal, s, s.getPoint().getX(), s.getPoint().getY()));
             }
         } else {
-            scrollPaneSagittal.removeEventFilter(ScrollEvent.ANY, filetrNoScroll);
+            scrollPaneSagittal.removeEventFilter(ScrollEvent.ANY, filterNoScroll);
         }
     }
 
     private BufferedImage getScaledImage(BufferedImage src, int w, int h) {
         int finalw = w;
         int finalh = h;
-        double factor = 1.0d;
+        double factor;
         if (src.getWidth() > src.getHeight()) {
             factor = ((double) src.getHeight() / (double) src.getWidth());
             finalh = (int) (finalw * factor);
@@ -563,7 +562,6 @@ public class SkeletonController {
         Image image = new Image("file:\\" + Skeleton.getPath() + imageName);
         BufferedImage buf = SwingFXUtils.fromFXImage(image, null);
         buf = getScaledImage(buf, 900, 595);
-        PixelReader reader = image.getPixelReader();
 
         gc.drawImage(SwingFXUtils.toFXImage(buf, null), 0, 0);
 
@@ -571,7 +569,6 @@ public class SkeletonController {
         Image backGround = new Image("/ru/kit/skeleton/image/grid.png");
         buf = SwingFXUtils.fromFXImage(backGround, null);
         buf = getScaledImage(buf, 900, 595);
-        PixelReader backGroundPixelReader = backGround.getPixelReader();
 
         gc.drawImage(SwingFXUtils.toFXImage(buf, null), 0, 0);
     }
@@ -599,12 +596,9 @@ public class SkeletonController {
 
                 anchorBlockLayout.setVisible(false);
 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        initialFields(backPlane.getThis(), stepNameBack, stepDescriptionBack);
-                        initialFields(sagittalPlane.getThis(), stepNameSagittal, stepDescriptionSagittal);
-                    }
+                Platform.runLater(() -> {
+                    initialFields(backPlane.getThis(), stepNameBack, stepDescriptionBack);
+                    initialFields(sagittalPlane.getThis(), stepNameSagittal, stepDescriptionSagittal);
                 });
             }
             return null;
