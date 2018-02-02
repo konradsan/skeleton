@@ -28,8 +28,8 @@ public class MainApp extends Application {
         Button btn = new Button();
         btn.setText("Кинект");
         btn.setOnAction(event -> {
-            Stage s = null;
-            s =  new SkeletonStage(true, "D:\\nikitaSolovyevProjects\\skeleton\\test\\");
+            Stage s;
+            s =  new SkeletonStage(true, "D:\\projects\\skeleton\\test\\");
             s.show();
         });
 
