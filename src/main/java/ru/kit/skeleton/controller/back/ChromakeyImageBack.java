@@ -130,20 +130,15 @@ public class ChromakeyImageBack extends ChromakeyImage {
         boolean isWaist = false;
         String waistString = "";
         String frontWaistString = "Постуральный мышечный дисбаланс в поясничном отделе позвоночника: ";
-        if (angle_waist_belt <= 2) {
-            if (leftWaist.y != rightWaist.y) {
+
+        if (angle_waist_belt > 2) {
+            if (leftWaist.y > rightWaist.y) {
                 isWaist = true;
-                waistString = "границы поясничного региона справа и слева асимметричны. ";
+                waistString = "верхняя и нижняя границы поясничного региона слева приближены друг к другу,  справа - взаимоудалены. ";
+            } else {
+                isWaist = true;
+                waistString = "верхняя и нижняя границы поясничного региона справа приближены друг к другу, слева - взаимоудалены. ";
             }
-        } else {
-            if (angle_waist_belt > 2)
-                if (leftWaist.y > rightWaist.y) {
-                    isWaist = true;
-                    waistString = "верхняя и нижняя границы поясничного региона слева приближены друг к другу,  справа - взаимоудалены. ";
-                } else {
-                    isWaist = true;
-                    waistString = "верхняя и нижняя границы поясничного региона справа приближены друг к другу, слева - взаимоудалены. ";
-                }
         }
 
 //        if (isNeck && isBrust && !isWaist)
