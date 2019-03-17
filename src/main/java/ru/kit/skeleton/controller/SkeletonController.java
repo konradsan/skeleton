@@ -14,14 +14,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelReader;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.kit.skeleton.SkeletonStage;
 import ru.kit.skeleton.controller.back.ChromakeyImageBack;
 import ru.kit.skeleton.controller.sagittal.ChromakeyImageSagittal;
@@ -38,8 +35,6 @@ import java.util.List;
 
 
 public class SkeletonController {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SkeletonController.class);
 
     public ToggleButton editSagittal;
     public ToggleButton editBack;
@@ -86,7 +81,6 @@ public class SkeletonController {
 
     @FXML
     public void initialize() {
-        LOG.info("------------------------ INITIALIZE ---------------------------------");
 
         gcBack = canvasBack.getGraphicsContext2D();
         canvasBack.setWidth(CANVAS_WEIGHT);
@@ -139,7 +133,6 @@ public class SkeletonController {
 
     @FXML
     public void onSave() {
-        LOG.info("------------------------ SAVE ------------------------");
         String backResult = getRecommendationAndWriteSvgAndImageBack();
         String sagittalResult = getRecommendationAndWriteSvgAndImageSagittal();
 
@@ -147,7 +140,7 @@ public class SkeletonController {
         map.put("back", backResult);
         map.put("sagittal", sagittalResult);
         Util.writeJSON(Skeleton.getPath(), map);
-        LOG.info("create JSON file {}", Skeleton.getPath() + "skeleton.json");
+        System.out.println("create JSON file {}" + Skeleton.getPath() + "skeleton.json");
 
         stage.close(!buttonOk.isDisable());
     }
@@ -158,12 +151,9 @@ public class SkeletonController {
                 backPlane.getByName("Мочка правого уха").getPoint(), backPlane.getByName("Изгиб талии слева").getPoint(), backPlane.getByName("Изгиб талии справа").getPoint(),
                 backPlane.getByName("Край подвздошной кости слева").getPoint(), backPlane.getByName("Край подвздошной кости справа").getPoint(), backPlane.getByName("Центр пятки слева").getPoint(), backPlane.getByName("Центр пятки справа").getPoint());
         String backResult = back.getRecommendation();
-        LOG.info("back recommendation: {}", backResult);
         Util.writeSVG(SVG.getPath(SkeletonStage.skeleton.isMan(), backPlane), back.getSvgParts(), Skeleton.getPath() + Skeleton.SVG_BACK);
-        LOG.info("write SVG {}", Skeleton.getPath() + Skeleton.SVG_BACK);
         BufferedImage imageBack = Util.cropImage(Skeleton.getPath() + Skeleton.RESULT_IMAGE_BACK);
         Util.writeImage(imageBack, Skeleton.getPath() + Skeleton.RESULT_IMAGE_BACK);
-        LOG.info("write image: {}", Skeleton.getPath() + Skeleton.RESULT_IMAGE_BACK);
         return backResult;
     }
 
@@ -171,12 +161,9 @@ public class SkeletonController {
         ChromakeyImageSagittal sagittal = new ChromakeyImageSagittal(sagittalPlane.getByName("Пятка").getPoint(), sagittalPlane.getByName("Кончик большого пальца стопы").getPoint(),
                 sagittalPlane.getByName("Поясничный лордоз").getPoint(), sagittalPlane.getByName("Грудной кифоз").getPoint(), sagittalPlane.getByName("Шейный лордоз").getPoint(), sagittalPlane.getByName("Наивысшая точка на голове").getPoint());
         String sagittalResult = sagittal.getRecommendation();
-        LOG.info("sagittal recommendation: {}", sagittalResult);
         Util.writeSVG(SVG.getPath(SkeletonStage.skeleton.isMan(), sagittalPlane), sagittal.getSvgParts(), Skeleton.getPath() + "sagittal.svg");
-        LOG.info("write SVG {}", Skeleton.getPath() + Skeleton.SVG_SAGITTAL);
         BufferedImage imageSagittal = Util.cropImage(Skeleton.getPath() + Skeleton.RESULT_IMAGE_SAGITTAL);
         Util.writeImage(imageSagittal, Skeleton.getPath() + Skeleton.RESULT_IMAGE_SAGITTAL);
-        LOG.info("write image: {}", Skeleton.getPath() + Skeleton.RESULT_IMAGE_SAGITTAL);
         return sagittalResult;
     }
 
@@ -218,12 +205,10 @@ public class SkeletonController {
     @FXML
     public void resetAllSteps() {
         if (tabBack.isSelected()) {
-            LOG.info("reset back image");
             backPlane.setDefault();
             insertImageOnBackCanvas();
             initialFields(backPlane.getThis(), stepNameBack, stepDescriptionBack);
         } else if (tabSagittal.isSelected()) {
-            LOG.info("reset sagittal image");
             sagittalPlane.setDefault();
             insertImageOnSagittalCanvas();
             initialFields(sagittalPlane.getThis(), stepNameSagittal, stepDescriptionSagittal);
@@ -271,17 +256,12 @@ public class SkeletonController {
 
     @FXML
     public void onClickCanvasSagittal(MouseEvent event) {
-        LOG.info("------------------------------------------------------------");
-        LOG.info("ON CLICK SAGITTAL CANVAS");
-        LOG.info("------------------------------------------------------------");
         Point point = null;
         Step step = sagittalPlane.getThis();
 
         if (step != null && step.getPoint() == null && !step.getName().equals("")) {
             double multiplier = getMultiplier(maximiseCounters[1]);
             point = new Point((int) (event.getX() / multiplier), (int) (event.getY() / multiplier));
-
-            LOG.info("Point{x={}, y={}}", point.getX(), point.getY());
 
             step.setPoint(point);
             putPoint(gcSagittal, step, point.getX(), point.getY());
@@ -291,9 +271,6 @@ public class SkeletonController {
 
     @FXML
     public void onClickCanvasBack(MouseEvent event) {
-        LOG.info("------------------------------------------------------------");
-        LOG.info("ON CLICK BAG CANVAS");
-        LOG.info("------------------------------------------------------------");
         Point point;
         Step step = backPlane.getThis();
             /* вычисляем множитель */
@@ -301,8 +278,6 @@ public class SkeletonController {
         if (step != null && step.getPoint() == null && !step.getName().equals("")) {
             double multiplier = getMultiplier(maximiseCounters[0]);
             point = new Point((int) (event.getX() / multiplier), (int) (event.getY() / multiplier));
-
-            LOG.info("Point{x={}, y={}}", point.getX(), point.getY());
 
             step.setPoint(point);
             putPoint(gcBack, step, point.getX(), point.getY());
@@ -326,7 +301,6 @@ public class SkeletonController {
 
     private void initialFields(Step step, Label stepName, TextArea stepDescription) {
         if (step != null) {
-            LOG.info("initial fields: {}, {}", step.getName(), step.getDescription());
             stepName.setText(step.getName());
             stepDescription.setText(step.getDescription());
         } else {
@@ -354,15 +328,12 @@ public class SkeletonController {
             gcBack.strokeLine(x + centerPoint, y, x + centerPoint, y - 120);
         } else if (step.getName().equals("Мочка правого уха") && (step2 = backPlane.getByName("Мочка левого уха")) != null) {
             double a = ChromakeyImageBack.getAngle(step.getPoint(), step2.getPoint());
-            LOG.info("Угол ухо: " + String.valueOf(a));
             gcBack.strokeLine(step.getPoint().getX(), step.getPoint().getY() + centerPoint, step2.getPoint().getX(), step2.getPoint().getY() + centerPoint);
         } else if (step.getName().equals("Правое плечо") && (step2 = backPlane.getByName("Левое плечо")) != null) {
             double a = ChromakeyImageBack.calcAngle(step.getPoint(), step2.getPoint());
-            LOG.info("Угол плечи: " + String.valueOf(a));
             gcBack.strokeLine(step.getPoint().getX(), step.getPoint().getY() + centerPoint, step2.getPoint().getX(), step2.getPoint().getY() + centerPoint);
         } else if (step.getName().equals("Изгиб талии справа") && (step2 = backPlane.getByName("Изгиб талии слева")) != null) {
             double a = ChromakeyImageBack.calcAngle(step.getPoint(), step2.getPoint());
-            LOG.info("Угол талия: " + String.valueOf(a));
             gcBack.strokeLine(step.getPoint().getX(), step.getPoint().getY() + centerPoint, step2.getPoint().getX(), step2.getPoint().getY() + centerPoint);
         } else if (step.getName().equals("Край подвздошной кости справа") && (step2 = backPlane.getByName("Край подвздошной кости слева")) != null) {
             gcBack.strokeLine(step.getPoint().getX(), step.getPoint().getY() + centerPoint, step2.getPoint().getX(), step2.getPoint().getY() + centerPoint);
@@ -425,8 +396,6 @@ public class SkeletonController {
     }
 
     public void zoomImage(GraphicsContext gc, Plane plane, int counters, String imageName) {
-        LOG.info("maximise x {}", (maximiseCounters[counters] + 1) * ZOOM);
-
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         gc.scale(1.2, 1.2);
         gc.getCanvas().setWidth(gc.getCanvas().getWidth() * ZOOM);
@@ -439,7 +408,6 @@ public class SkeletonController {
 
     public void minimise() {
         if (tabBack.isSelected() && maximiseCounters[0] > 0) {
-            LOG.info("back maximise x {}", (maximiseCounters[0] - 1) * ZOOM);
 
             gcBack.clearRect(0, 0, canvasBack.getWidth(), canvasBack.getHeight());
             gcBack.scale(0.83334, 0.83334);
@@ -451,7 +419,6 @@ public class SkeletonController {
             maximiseCounters[0]--;
 
         } else if (tabSagittal.isSelected() && maximiseCounters[1] > 0) {
-            LOG.info("sagittal maximise x {}", (maximiseCounters[1] - 1) * ZOOM);
 
             gcSagittal.clearRect(0, 0, canvasSagittal.getWidth(), canvasSagittal.getHeight());
             gcSagittal.scale(0.83334, 0.83334);
@@ -492,8 +459,6 @@ public class SkeletonController {
                 point = new Point((int) (event.getX() / multiplier), (int) (event.getY() / multiplier) - 30);
             }
 
-            LOG.info("moved to Point{x={}, y={}}", point.getX(), point.getY());
-
             if (step != null) {
                 step.setPoint(point);
                 gcBack.clearRect(0, 0, canvasBack.getWidth(), canvasBack.getHeight());
@@ -523,8 +488,6 @@ public class SkeletonController {
                 }
                 point = new Point((int) (event.getX() / multiplier), (int) (event.getY() / multiplier) - 30);
             }
-
-            LOG.info("moved to Point{x={}, y={}}", point.getX(), point.getY());
 
             if (step != null) {
                 step.setPoint(point);
@@ -576,19 +539,15 @@ public class SkeletonController {
     private Task<Void> startPhotoMaker = new Task<Void>() {
         @Override
         protected Void call() throws Exception {
-            LOG.info("start photo maker");
-
             ProcessBuilder builder = new ProcessBuilder("cmd", "/C", "\"" + System.getProperty("java.home") + "/bin/java\"" + " -jar kinect\\Kinect-photo-maker.jar " + Skeleton.getPath());
             Process process = builder.start();
             while (process.isAlive() && !this.isCancelled()) {
-                LOG.info("wait...");
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            LOG.info("close photo maker");
 
             if (Skeleton.hasPhoto()) {
                 insertImage(gcBack, Skeleton.ORIGIN_IMAGE_BACK);

@@ -7,8 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.kit.skeleton.controller.SkeletonController;
 import ru.kit.skeleton.model.Skeleton;
 
@@ -20,7 +18,6 @@ import java.util.List;
  */
 public class SkeletonStage extends Stage {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SkeletonStage.class);
     public static Skeleton skeleton;
     private SkeletonController controller;
 
@@ -52,12 +49,10 @@ public class SkeletonStage extends Stage {
             alert.showAndWait();
             if (alert.getResult() == ButtonType.OK) {
                 cancelTasks();
-                LOG.info("CLOSE STAGE, NOT SAVE");
                 this.close();
             }
         } else {
             cancelTasks();
-            LOG.info("CLOSE STAGE AND SAVE");
             this.close();
         }
     }

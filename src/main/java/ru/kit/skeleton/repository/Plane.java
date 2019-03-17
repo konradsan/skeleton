@@ -1,19 +1,13 @@
 package ru.kit.skeleton.repository;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.kit.skeleton.model.Step;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by mikha on 27.01.2017.
- */
 public abstract class Plane implements ListRepository {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Plane.class);
     private List<Step> stepList = new ArrayList<>();
     private int counter = 0;
 
@@ -24,7 +18,6 @@ public abstract class Plane implements ListRepository {
             return step;
         }
 
-        LOG.info("get Step id = {}, {}, {}", i, null, counter);
         return null;
     }
 
@@ -62,7 +55,6 @@ public abstract class Plane implements ListRepository {
 
     @Override
     public void setDefault() {
-        LOG.info("set default values");
         counter = 0;
         stepList.stream().filter(step -> step.getPoint() != null).forEach(step -> step.setPoint(null));
     }

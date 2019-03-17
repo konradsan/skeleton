@@ -1,11 +1,8 @@
 package ru.kit.skeleton.controller.sagittal;
 
-//import ru.kit.photoanalysis.back.ImageContourModel;
-
 import ru.kit.skeleton.controller.ChromakeyImage;
 import ru.kit.skeleton.controller.SkeletonController;
 import ru.kit.skeleton.model.SVG;
-import ru.kit.skeleton.model.Skeleton;
 
 import java.awt.*;
 
